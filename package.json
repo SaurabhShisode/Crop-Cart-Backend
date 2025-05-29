@@ -1,0 +1,19 @@
+{
+  "name": "cropcart-backend",
+  "version": "1.0.0",
+  "description": "Mock backend for CropCart using json-server",
+  "main": "index.js",
+  "scripts": {
+    "start": "json-server --watch db.json --port 5000"
+  },
+  "keywords": [
+    "json-server",
+    "mock-api",
+    "cropcart"
+  ],
+  "author": "Saurabh Shisode",
+  "license": "MIT",
+  "dependencies": {
+    "json-server": "^0.17.3"
+  }
+}
