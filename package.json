@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Mock backend for CropCart using json-server",
   "scripts": {
-    "start": "json-server --watch db.json --port 5000"
+    "start": "node server.js"
   },
   "keywords": [
     "json-server",
