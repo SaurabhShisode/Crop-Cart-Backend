@@ -1,31 +1,16 @@
-
-const express = require('express');
+import express from 'express';
+import Order from '../models/Order.js'; 
 const router = express.Router();
-const Order = require('../models/Order'); 
 
 router.post('/', async (req, res) => {
   try {
-    const { userId, name, email, address, items, total, tax, deliveryFee } = req.body;
-
-    const newOrder = new Order({
-      userId,
-      name,
-      email,
-      address,
-      items,
-      total,
-      tax,
-      deliveryFee,
-      placedAt: new Date(),
-    });
-
+    const newOrder = new Order(req.body);
     await newOrder.save();
-
-    res.status(201).json({ message: 'Order placed successfully', order: newOrder });
+    res.status(201).json({ message: 'Order placed successfully' });
   } catch (err) {
-    console.error('Error saving order:', err);
+    console.error(err);
     res.status(500).json({ error: 'Failed to place order' });
   }
 });
 
-module.exports = router;
+export default router;

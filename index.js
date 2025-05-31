@@ -2,8 +2,10 @@ import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
+
 import authRoutes from './routes/userRoutes.js';
 import cropRoutes from './routes/cropRoutes.js';
+import ordersRoute from './routes/orders.js'; 
 
 dotenv.config();
 
@@ -16,15 +18,13 @@ app.use(cors({
   credentials: true,
 }));
 app.use(express.json());
-app.use('/crops', cropRoutes);
-const ordersRoute = require('./routes/orders');
-app.use('/api/orders', ordersRoute);
-
 
 // ===== Routes =====
 app.use('/api/auth', authRoutes);
+app.use('/crops', cropRoutes);
+app.use('/api/orders', ordersRoute);
 
-// Add a simple root route for status check
+// ===== Status Route =====
 app.get('/', (req, res) => {
   res.send('CropCart Backend API is running');
 });
