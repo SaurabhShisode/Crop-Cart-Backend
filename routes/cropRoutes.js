@@ -1,5 +1,5 @@
 import express from 'express';
-import Crop from '../models/cropModel.js'; // Your MongoDB model for crops
+import Crop from '../models/Crops.js'; // Your MongoDB model for crops
 
 const router = express.Router();
 
