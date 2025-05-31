@@ -17,6 +17,9 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use('/crops', cropRoutes);
+const ordersRoute = require('./routes/orders');
+app.use('/api/orders', ordersRoute);
+
 
 // ===== Routes =====
 app.use('/api/auth', authRoutes);
