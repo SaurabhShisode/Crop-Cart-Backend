@@ -36,3 +36,5 @@ coverage/
 # Optional: ignore lock files (if using only npm or only yarn, keep one)
 package-lock.json
 # yarn.lock
+
+serviceAccountKey.json

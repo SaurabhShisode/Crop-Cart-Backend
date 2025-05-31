@@ -1,16 +1,8 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import User from '../models/User.js';
-import admin from 'firebase-admin';
 import { getAuth } from 'firebase-admin/auth';
-import serviceAccount from '../config/firebaseServiceAccount.json' assert { type: "json" };
-
-// Initialize Firebase Admin SDK
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-  });
-}
+import admin from '../firebaseAdmin.js'; // ✅ Use shared Firebase instance
 
 // Register new user
 export const registerUser = async (req, res) => {
@@ -94,8 +86,8 @@ export const googleLogin = async (req, res) => {
       user = new User({
         name: name || email.split('@')[0],
         email,
-        role: 'buyer',
-        password: '', // no password for Google
+        role: 'user',
+        password: '', // Google user has no local password
       });
       await user.save();
     }
