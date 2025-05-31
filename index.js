@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import authRoutes from './routes/userRoutes.js';
+import cropRoutes from './routes/cropRoutes.js';
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(cors({
   credentials: true,
 }));
 app.use(express.json());
+app.use('/crops', cropRoutes);
 
 // ===== Routes =====
 app.use('/api/auth', authRoutes);

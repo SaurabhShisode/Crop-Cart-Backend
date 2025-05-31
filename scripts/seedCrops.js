@@ -23,7 +23,7 @@ const crops = [
     regionPincodes: ["400003", "110002", "425401"],
     type: "crop",
   },
-  // Add more crops as needed
+
 ];
 
 const seedCrops = async () => {
