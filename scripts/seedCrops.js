@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import Crop from '../models/Crop.js';
+import Crop from '../models/Crops.js';
 
 dotenv.config();
 
