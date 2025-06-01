@@ -1,17 +1,17 @@
-const mongoose = require("mongoose");
+import mongoose from 'mongoose';
 
 const orderSchema = new mongoose.Schema({
   products: [
     {
       productId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Product",
-        required: true
+        ref: "Product", // make sure this matches your actual model name
+        required: true,
       },
       quantity: {
         type: Number,
         required: true,
-        default: 1
+        default: 1,
       },
       sellerAddress: {
         street: String,
@@ -19,16 +19,16 @@ const orderSchema = new mongoose.Schema({
         state: String,
         zip: String,
         latitude: Number,
-        longitude: Number
+        longitude: Number,
       },
-      distance: Number, // distance from seller to delivery for this product (km)
-      estimatedDeliveryTime: Date // estimated delivery for this product
-    }
+      distance: Number,
+      estimatedDeliveryTime: Date,
+    },
   ],
   buyer: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    required: true
+    required: true,
   },
   deliveryAddress: {
     street: String,
@@ -36,24 +36,25 @@ const orderSchema = new mongoose.Schema({
     state: String,
     zip: String,
     latitude: Number,
-    longitude: Number
+    longitude: Number,
   },
   status: {
     type: String,
     enum: ["pending", "confirmed", "shipped", "delivered", "cancelled"],
-    default: "pending"
+    default: "pending",
   },
   createdAt: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   deliveredAt: {
-    type: Date
+    type: Date,
   },
   isDelivered: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 });
 
-module.exports = mongoose.model("Order", orderSchema);
+const Order = mongoose.model('Order', orderSchema);
+export default Order;
