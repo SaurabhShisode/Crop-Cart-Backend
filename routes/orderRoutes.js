@@ -1,15 +1,56 @@
-
 import express from 'express';
-import Order from '../models/Order.js'; 
+import Order from '../models/Order.js';
 import authMiddleware from '../middleware/authMiddleware.js';
+import nodemailer from 'nodemailer';
 
 const router = express.Router();
 
-// Existing POST route to place order
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,      
+    pass: process.env.EMAIL_PASSWORD,  
+  },
+});
+
+
 router.post('/', async (req, res) => {
   try {
     const newOrder = new Order(req.body);
     await newOrder.save();
+
+  
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: newOrder.email,
+      subject: 'Order Confirmation - CropCart',
+      html: `
+        <h2>Thank you for your order, ${newOrder.name}!</h2>
+        <p>Your order ID is <b>${newOrder._id}</b>.</p>
+        <p><b>Delivery Address:</b> ${newOrder.address}</p>
+        <p><b>Phone:</b> ${newOrder.phone}</p>
+        <h3>Items:</h3>
+        <ul>
+          ${newOrder.items.map(item => 
+            `<li>${item.name} — ${item.quantity} (${item.quantityInCart})</li>`).join('')}
+        </ul>
+        <p><b>Total:</b> ₹${newOrder.total}</p>
+        <p>We will notify you once your order is shipped.</p>
+        <p>Thanks for shopping with CropCart!</p>
+      `,
+    };
+
+ 
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error('Error sending email:', error);
+       
+      } else {
+        console.log('Order confirmation email sent:', info.response);
+      }
+    });
+
     res.status(201).json({ message: 'Order placed successfully' });
   } catch (err) {
     console.error(err);
@@ -17,11 +58,10 @@ router.post('/', async (req, res) => {
   }
 });
 
-// New GET route to fetch orders for logged-in user
+
 router.get('/user/:userId', authMiddleware, async (req, res) => {
   const { userId } = req.params;
   console.log('Decoded JWT user:', req.user);
-  // Check if userId matches logged-in user (security check)
   if (req.user.id !== userId) {
     return res.status(403).json({ message: 'Unauthorized access' });
   }
