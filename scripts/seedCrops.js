@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
 import Crop from '../models/Crops.js';
-
+import axios from 'axios';
+import dotenv from 'dotenv';
 dotenv.config();
 
 const crops = [
@@ -277,19 +277,78 @@ const crops = [
   },
 ];
 
+const sellerAddresses = [
+  {
+    street: "123 Green Lane",
+    city: "Delhi",
+    state: "Delhi",
+    country: "India",
+    postalCode: "110001",
+  },
+  {
+    street: "56 Agro Road",
+    city: "Bangalore",
+    state: "Karnataka",
+    country: "India",
+    postalCode: "560001",
+  },
+  {
+    street: "89 Harvest Street",
+    city: "Mumbai",
+    state: "Maharashtra",
+    country: "India",
+    postalCode: "400001",
+  },
+  {
+    street: "21 Farm View",
+    city: "Kolkata",
+    state: "West Bengal",
+    country: "India",
+    postalCode: "700001",
+  },
+];
 
+const getCoordinates = async (address) => {
+  const formatted = `${address.street}, ${address.city}, ${address.state}, ${address.country}, ${address.postalCode}`;
+  const apiKey = process.env.GOOGLE_MAPS_API_KEY;
+  const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(formatted)}&key=${apiKey}`;
+
+  try {
+    const res = await axios.get(url);
+    const location = res.data.results[0]?.geometry?.location;
+    return location || { lat: null, lng: null };
+  } catch (err) {
+    console.error("❌ Failed geocoding:", formatted, err.message);
+    return { lat: null, lng: null };
+  }
+};
 
 const seedCrops = async () => {
-    try {
-        await mongoose.connect(process.env.MONGO_URI);
-        await Crop.deleteMany({});
-        await Crop.insertMany(crops);
-        console.log('Crops seeded successfully!');
-        process.exit();
-    } catch (error) {
-        console.error('Error seeding crops:', error);
-        process.exit(1);
-    }
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    await Crop.deleteMany();
+
+    
+    const resolvedAddresses = await Promise.all(
+      sellerAddresses.map(async (addr) => ({
+        ...addr,
+        coordinates: await getCoordinates(addr),
+      }))
+    );
+
+    
+    const cropsWithSeller = crops.map((crop, index) => ({
+      ...crop,
+      sellerAddress: resolvedAddresses[index % resolvedAddresses.length],
+    }));
+
+    await Crop.insertMany(cropsWithSeller);
+    console.log('✅ All crops seeded with seller addresses and coordinates');
+    process.exit();
+  } catch (error) {
+    console.error('❌ Seeding failed:', error);
+    process.exit(1);
+  }
 };
 
 seedCrops();

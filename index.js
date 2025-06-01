@@ -6,6 +6,7 @@ import cors from 'cors';
 import authRoutes from './routes/userRoutes.js';
 import cropRoutes from './routes/cropRoutes.js';
 import ordersRoute from './routes/orderRoutes.js'; 
+import './utils/orderStatusUpdater.js';  // <-- Import to start background job
 
 dotenv.config();
 

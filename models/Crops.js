@@ -8,8 +8,21 @@ const cropSchema = new mongoose.Schema({
   image: { type: String },
   regionPincodes: [{ type: String, required: true }],
   type: { type: String, required: true },
-  quantity: { type: String, required: true }, // new field added
-});
+  quantity: { type: String, required: true },
+
+  sellerAddress: {
+    street: { type: String },
+    city: { type: String },
+    state: { type: String },
+    country: { type: String },
+    postalCode: { type: String },
+    coordinates: {
+      lat: { type: Number },
+      lng: { type: Number }
+    }
+  }
+}, { timestamps: true });  
 
 const Crop = mongoose.model('Crop', cropSchema);
+
 export default Crop;
