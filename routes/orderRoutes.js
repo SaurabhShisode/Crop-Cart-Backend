@@ -20,7 +20,7 @@ router.post('/', async (req, res) => {
 // New GET route to fetch orders for logged-in user
 router.get('/user/:userId', authMiddleware, async (req, res) => {
   const { userId } = req.params;
-
+  console.log('Decoded JWT user:', req.user);
   // Check if userId matches logged-in user (security check)
   if (req.user.id !== userId) {
     return res.status(403).json({ message: 'Unauthorized access' });
