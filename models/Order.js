@@ -4,6 +4,7 @@ const orderSchema = new mongoose.Schema({
   userId: String,
   name: String,
   email: String,
+  phone: String, 
   address: String,
   items: Array,
   total: String,
