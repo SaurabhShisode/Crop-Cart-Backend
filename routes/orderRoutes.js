@@ -1,6 +1,6 @@
 import express from 'express';
-import Order from '../models/Order.js'; 
-import Product from '../models/Crops.js'; // or your Product model
+import { Order } from '../models/Order.js'; // ✅ Corrected named import
+import Product from '../models/Crops.js'; // If this has default export, this is fine
 import authMiddleware from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -11,10 +11,12 @@ function getDistanceInKm(lat1, lon1, lat2, lon2) {
   const dLat = (lat2 - lat1) * Math.PI / 180;
   const dLon = (lon2 - lon1) * Math.PI / 180;
   const a =
-    Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-    Math.sin(dLon/2) * Math.sin(dLon/2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(lat1 * Math.PI / 180) *
+      Math.cos(lat2 * Math.PI / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c;
 }
 
@@ -23,11 +25,10 @@ router.post('/', authMiddleware, async (req, res) => {
   try {
     const { items, deliveryAddress } = req.body;
 
-    if (
-      !deliveryAddress.latitude || 
-      !deliveryAddress.longitude
-    ) {
-      return res.status(400).json({ message: "Delivery address coordinates are required" });
+    if (!deliveryAddress.latitude || !deliveryAddress.longitude) {
+      return res
+        .status(400)
+        .json({ message: 'Delivery address coordinates are required' });
     }
 
     const productsWithSellerInfo = [];
@@ -35,12 +36,15 @@ router.post('/', authMiddleware, async (req, res) => {
     for (const item of items) {
       const product = await Product.findById(item.productId);
       if (!product) {
-        return res.status(404).json({ message: `Product with id ${item.productId} not found` });
+        return res
+          .status(404)
+          .json({ message: `Product with id ${item.productId} not found` });
       }
-      
-      // Ensure sellerAddress and coordinates exist
+
       if (!product.sellerAddress || !product.sellerAddress.coordinates) {
-        return res.status(400).json({ message: `Seller address missing for product ${product._id}` });
+        return res.status(400).json({
+          message: `Seller address missing for product ${product._id}`,
+        });
       }
 
       const sellerCoords = product.sellerAddress.coordinates;
@@ -51,16 +55,17 @@ router.post('/', authMiddleware, async (req, res) => {
         deliveryAddress.longitude
       );
 
-      // Simple estimated delivery time (e.g., 1 hour per 50km + 1 hour handling)
       const estimatedHours = Math.ceil(distance / 50) + 1;
-      const estimatedDeliveryTime = new Date(Date.now() + estimatedHours * 3600 * 1000);
+      const estimatedDeliveryTime = new Date(
+        Date.now() + estimatedHours * 3600 * 1000
+      );
 
       productsWithSellerInfo.push({
         productId: product._id,
         quantity: item.quantity,
         sellerAddress: product.sellerAddress,
         distance,
-        estimatedDeliveryTime
+        estimatedDeliveryTime,
       });
     }
 
@@ -69,12 +74,13 @@ router.post('/', authMiddleware, async (req, res) => {
       products: productsWithSellerInfo,
       deliveryAddress,
       status: 'pending',
-      createdAt: new Date()
+      createdAt: new Date(),
     });
 
     await newOrder.save();
-    res.status(201).json({ message: 'Order placed successfully', order: newOrder });
-
+    res
+      .status(201)
+      .json({ message: 'Order placed successfully', order: newOrder });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Failed to place order' });
