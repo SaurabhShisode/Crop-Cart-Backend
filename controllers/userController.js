@@ -87,7 +87,7 @@ export const googleLogin = async (req, res) => {
         name: name || email.split('@')[0],
         email,
         role: 'user',
-        password: '', // Google user has no local password
+        password: '', 
       });
       await user.save();
     }
