@@ -4,11 +4,10 @@ import Crop from '../models/Crops.js';
 
 dotenv.config();
 
-const farmerId = '683d2ff4d480b93443133d42';
+const farmerId = '683d5e05c1423e84ffa38f14';
 
 const crops = [
   {
-    id: "1",
     name: "Wheat",
     price: 32,
     quantity: "1 kg",
@@ -19,7 +18,6 @@ const crops = [
     farmer: farmerId,
   },
   {
-    id: "2",
     name: "Rice",
     price: 42,
     quantity: "1 kg",
@@ -30,7 +28,6 @@ const crops = [
     farmer: farmerId,
   },
   {
-    id: "3",
     name: "Corn",
     price: 28,
     quantity: "1 kg",
@@ -41,7 +38,6 @@ const crops = [
     farmer: farmerId,
   },
   {
-    id: "4",
     name: "Barley",
     price: 30,
     quantity: "1 kg",
@@ -52,7 +48,6 @@ const crops = [
     farmer: farmerId,
   },
   {
-    id: "5",
     name: "Soybean",
     price: 55,
     quantity: "1 kg",
@@ -63,7 +58,6 @@ const crops = [
     farmer: farmerId,
   },
   {
-    id: "6",
     name: "Cotton",
     price: 65,
     quantity: "1 bundle",
@@ -74,7 +68,6 @@ const crops = [
     farmer: farmerId,
   },
   {
-    id: "7",
     name: "Sugarcane",
     price: 12,
     quantity: "1 stalk",
@@ -85,7 +78,6 @@ const crops = [
     farmer: farmerId,
   },
   {
-    id: "19",
     name: "Millet",
     price: 38,
     quantity: "1 kg",
@@ -96,7 +88,6 @@ const crops = [
     farmer: farmerId,
   },
   {
-    id: "29",
     name: "Oats",
     price: 90,
     quantity: "500 gm",
@@ -107,7 +98,6 @@ const crops = [
     farmer: farmerId,
   },
   {
-    id: "30",
     name: "Peanuts",
     price: 55,
     quantity: "1 kg",
@@ -118,7 +108,6 @@ const crops = [
     farmer: farmerId,
   },
   {
-    id: "31",
     name: "Green Gram",
     price: 90,
     quantity: "1 kg",
@@ -129,7 +118,6 @@ const crops = [
     farmer: farmerId,
   },
   {
-    id: "32",
     name: "Jowar",
     price: 32,
     quantity: "1 kg",
