@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 import Crop from '../models/Crops.js';
 
 dotenv.config();
-
 const farmerId = '683d5e05c1423e84ffa38f14';
 
 const crops = [
@@ -16,6 +15,7 @@ const crops = [
     regionPincodes: ["110001", "110002", "110003", "425401"],
     type: "crop",
     farmer: farmerId,
+
   },
   {
     name: "Rice",
@@ -26,6 +26,7 @@ const crops = [
     regionPincodes: ["560001", "560002", "560003", "425401"],
     type: "crop",
     farmer: farmerId,
+
   },
   {
     name: "Corn",
@@ -36,6 +37,7 @@ const crops = [
     regionPincodes: ["400001", "400002", "425401"],
     type: "crop",
     farmer: farmerId,
+
   },
   {
     name: "Barley",
@@ -46,6 +48,7 @@ const crops = [
     regionPincodes: ["110001", "110002", "110004", "425401"],
     type: "crop",
     farmer: farmerId,
+
   },
   {
     name: "Soybean",
@@ -56,6 +59,7 @@ const crops = [
     regionPincodes: ["700001", "700002", "425401"],
     type: "crop",
     farmer: farmerId,
+
   },
   {
     name: "Cotton",
@@ -66,6 +70,7 @@ const crops = [
     regionPincodes: ["560001", "560004", "425401"],
     type: "crop",
     farmer: farmerId,
+
   },
   {
     name: "Sugarcane",
@@ -76,6 +81,7 @@ const crops = [
     regionPincodes: ["400001", "400005", "425401"],
     type: "crop",
     farmer: farmerId,
+
   },
   {
     name: "Millet",
@@ -86,8 +92,118 @@ const crops = [
     regionPincodes: ["400003", "110002", "425401"],
     type: "crop",
     farmer: farmerId,
+
   },
   {
+    id: "20",
+    name: "Lentils",
+    price: 78,
+    quantity: "1 kg",
+    availability: "Available now",
+    image: "https://arrowheadmills.com/wp-content/uploads/2022/10/red-lentils-1-1024x684.jpg",
+    regionPincodes: ["110001", "700001", "425401"],
+    type: "crop",
+    farmer: farmerId,
+
+  },
+  {
+    id: "21",
+    name: "Flour",
+    price: 32,
+    quantity: "1 kg",
+    availability: "Available now",
+    image: "https://whitecaps.in/wp-content/uploads/2025/05/Different-Types-of-Flour-for-Baking.webp",
+    regionPincodes: ["560001", "560005", "425401"],
+    type: "grocery",
+    farmer: farmerId,
+
+  },
+  {
+    id: "22",
+    name: "Cooking Oil",
+    price: 135,
+    quantity: "1 litre",
+    availability: "Available now",
+    image: "https://rukminim2.flixcart.com/image/850/1000/l2hwwi80/edible-oil/k/y/s/1-canola-1-litre-cooking-oil-plastic-bottle-1-canola-oil-jivo-original-imagdtnnkccguhzz.jpeg?q=90&crop=false",
+    regionPincodes: ["400001", "400008", "425401"],
+    type: "grocery",
+    farmer: farmerId,
+
+  },
+  {
+    id: "23",
+    name: "Sugar",
+    price: 44,
+    quantity: "1 kg",
+    availability: "Available now",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGQvGDxk7hwBteBGT3hg4JwBPraCTDiBVsfg&s",
+    regionPincodes: ["110003", "110007", "425401"],
+    type: "grocery",
+    farmer: farmerId,
+
+  },
+  {
+    id: "24",
+    name: "Salt",
+    price: 18,
+    quantity: "1 kg",
+    availability: "Available now",
+    image: "https://www.sirimart.in/wp-content/uploads/2021/03/Pink-Himalayan-Salt.jpg",
+    regionPincodes: ["700001", "700004", "425401"],
+    type: "grocery",
+    farmer: farmerId,
+
+  },
+  {
+    id: "25",
+    name: "Milk",
+    price: 56,
+    quantity: "1 litre",
+    availability: "Available now",
+    image: "https://5.imimg.com/data5/SB/ET/MY-12973441/pure-dairy-milk.jpg",
+    regionPincodes: ["110001", "110009", "425401"],
+    type: "dairy",
+    farmer: farmerId,
+
+  },
+  {
+    id: "26",
+    name: "Cheese",
+    price: 190,
+    quantity: "500 gm",
+    availability: "Available now",
+    image: "https://static.toiimg.com/thumb/msid-115029115,width-400,resizemode-4/115029115.jpg",
+    regionPincodes: ["560002", "560006", "425401"],
+    type: "dairy",
+    farmer: farmerId,
+
+  },
+  {
+    id: "27",
+    name: "Butter",
+    price: 170,
+    quantity: "500 gm",
+    availability: "Limited stock",
+    image: "https://www.fitterfly.com/blog/wp-content/uploads/2024/09/Is-Butter-Good-for-Weight-Loss.webp",
+    regionPincodes: ["400001", "400009", "425401"],
+    type: "dairy",
+    farmer: farmerId,
+
+  },
+  {
+    id: "28",
+    name: "Curd",
+    price: 38,
+    quantity: "500 ml",
+    availability: "Available now",
+    image: "https://images.jdmagicbox.com/quickquotes/images_main/-24qv1bul.jpg",
+    regionPincodes: ["700002", "700005", "425401"],
+    type: "dairy",
+    farmer: farmerId,
+
+  },
+  {
+    id: "29",
     name: "Oats",
     price: 90,
     quantity: "500 gm",
@@ -96,6 +212,7 @@ const crops = [
     regionPincodes: ["110005", "110006", "425401"],
     type: "crop",
     farmer: farmerId,
+
   },
   {
     name: "Peanuts",
@@ -106,6 +223,7 @@ const crops = [
     regionPincodes: ["560007", "560008", "425401"],
     type: "crop",
     farmer: farmerId,
+
   },
   {
     name: "Green Gram",
@@ -116,6 +234,7 @@ const crops = [
     regionPincodes: ["700003", "700007", "425401"],
     type: "crop",
     farmer: farmerId,
+
   },
   {
     name: "Jowar",
@@ -126,8 +245,83 @@ const crops = [
     regionPincodes: ["400003", "400006", "425401"],
     type: "crop",
     farmer: farmerId,
+
+  },
+  {
+    id: "33",
+    name: "Honey",
+    price: 240,
+    quantity: "500 ml",
+    availability: "Available now",
+    image: "https://images.immediate.co.uk/production/volatile/sites/30/2024/03/Honey440-bb52330.jpg?quality=90&resize=440,400",
+    regionPincodes: ["110002", "110008", "425401"],
+    type: "grocery",
+    farmer: farmerId,
+
+  },
+  {
+    id: "34",
+    name: "Tea Leaves",
+    price: 280,
+    quantity: "250 gm",
+    availability: "Available now",
+    image: "https://rukminim2.flixcart.com/image/850/1000/khuvxjk0-0/tea/u/7/j/200-100-natural-organic-herbal-green-tea-leaf-for-weight-loss-original-imafxsahfkdyqs9y.jpeg?q=20&crop=false",
+    regionPincodes: ["560010", "560011", "425401"],
+    type: "grocery",
+    farmer: farmerId,
+
+  },
+  {
+    id: "35",
+    name: "Coffee Beans",
+    price: 370,
+    quantity: "250 gm",
+    availability: "Limited stock",
+    image: "https://assets.bonappetit.com/photos/57c5d0e36a6acdf3485dfb2b/16:9/w_1280,c_limit/3717295073_f5ae257d71_o.jpg?mbid=social_retweet",
+    regionPincodes: ["700010", "700011", "425401"],
+    type: "grocery",
+    farmer: farmerId,
+
+  },
+  {
+    id: "36",
+    name: "Paneer",
+    price: 200,
+    quantity: "500 gm",
+    availability: "Available now",
+    image: "https://www.between2kitchens.com/wp-content/uploads/2021/09/Paneer-cubes-on-cutting-board-edited-19-of-1-1.jpg",
+    regionPincodes: ["110004", "110010", "425401"],
+    type: "dairy",
+    farmer: farmerId,
+
+  },
+  {
+    id: "37",
+    name: "Ghee",
+    price: 320,
+    quantity: "1 litre",
+    availability: "Available now",
+    image: "https://m.media-amazon.com/images/I/51cAnoCvWkL._AC_UF1000,1000_QL80_.jpg",
+    regionPincodes: ["560009", "560012", "425401"],
+    type: "dairy",
+    farmer: farmerId,
+
+  },
+  {
+    id: "38",
+    name: "Eggs",
+    price: 6,
+    quantity: "1 piece",
+    availability: "Available now",
+    image: "https://kidseatincolor.com/wp-content/uploads/2022/02/eggs-e1648216369366.jpeg",
+    regionPincodes: ["400010", "400011", "425401"],
+    type: "dairy",
+    farmer: farmerId,
+
   },
 ];
+
+
 
 const seedCrops = async () => {
   try {
