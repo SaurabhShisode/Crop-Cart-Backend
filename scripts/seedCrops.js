@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import Crop from '../models/Crops.js';
 
 dotenv.config();
-const farmerId = '683d5e05c1423e84ffa38f14';
+const farmerId = '683d2ff4d480b93443133d42';
 
 const crops = [
   {
