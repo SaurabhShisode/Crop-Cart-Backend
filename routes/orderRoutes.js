@@ -1,10 +1,9 @@
 import express from 'express';
 import Order from '../models/Order.js';
-import authMiddleware from '../middleware/authMiddleware.js';
+import { protect } from '../middleware/authMiddleware.js';  
 import nodemailer from 'nodemailer';
 
 const router = express.Router();
-
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -14,13 +13,11 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-
 router.post('/', async (req, res) => {
   try {
     const newOrder = new Order(req.body);
     await newOrder.save();
 
-  
     const mailOptions = {
       from: process.env.EMAIL_USER,
       to: newOrder.email,
@@ -41,11 +38,9 @@ router.post('/', async (req, res) => {
       `,
     };
 
- 
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
         console.error('Error sending email:', error);
-       
       } else {
         console.log('Order confirmation email sent:', info.response);
       }
@@ -59,7 +54,7 @@ router.post('/', async (req, res) => {
 });
 
 
-router.get('/user/:userId', authMiddleware, async (req, res) => {
+router.get('/user/:userId', protect, async (req, res) => {
   const { userId } = req.params;
   console.log('Decoded JWT user:', req.user);
   if (req.user.id !== userId) {
