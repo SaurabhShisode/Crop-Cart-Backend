@@ -2,15 +2,25 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import User from '../models/User.js';
 import { getAuth } from 'firebase-admin/auth';
-import admin from '../firebaseAdmin.js'; // ✅ Use shared Firebase instance
+import admin from '../firebaseAdmin.js';
 
-// Register new user
+// Utility to generate JWT
+const generateToken = (user) => {
+  return jwt.sign(
+    { id: user._id, email: user.email, role: user.role },
+    process.env.JWT_SECRET,
+    { expiresIn: '1d' }
+  );
+};
+
+// Register new user (generic)
 export const registerUser = async (req, res) => {
-  const { name, email, password, role } = req.body;
+  const { name, email, password, role = 'user' } = req.body;
 
   try {
     const existingUser = await User.findOne({ email });
-    if (existingUser) return res.status(400).json({ message: 'User already exists' });
+    if (existingUser)
+      return res.status(400).json({ message: 'User already exists' });
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -31,12 +41,18 @@ export const registerUser = async (req, res) => {
         name: newUser.name,
         email: newUser.email,
         role: newUser.role,
-      }
+      },
     });
   } catch (error) {
     console.error('Register User Error:', error);
     res.status(500).json({ message: 'Server error', error });
   }
+};
+
+// ✅ Register new farmer
+export const registerFarmer = async (req, res) => {
+  req.body.role = 'farmer';
+  return registerUser(req, res); 
 };
 
 // Login user (Email & Password)
@@ -49,13 +65,10 @@ export const loginUser = async (req, res) => {
       return res.status(400).json({ message: 'Invalid email or password' });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ message: 'Invalid email or password' });
+    if (!isMatch)
+      return res.status(400).json({ message: 'Invalid email or password' });
 
-    const token = jwt.sign(
-      { id: user._id, email: user.email, role: user.role },
-      process.env.JWT_SECRET,
-      { expiresIn: '1d' }
-    );
+    const token = generateToken(user);
 
     res.json({
       token,
@@ -78,7 +91,7 @@ export const googleLogin = async (req, res) => {
 
   try {
     const decoded = await getAuth().verifyIdToken(token);
-    const { email, name, uid } = decoded;
+    const { email, name } = decoded;
 
     let user = await User.findOne({ email });
 
@@ -87,16 +100,12 @@ export const googleLogin = async (req, res) => {
         name: name || email.split('@')[0],
         email,
         role: 'user',
-        password: '', 
+        password: '',
       });
       await user.save();
     }
 
-    const jwtToken = jwt.sign(
-      { id: user._id, email: user.email, role: user.role },
-      process.env.JWT_SECRET,
-      { expiresIn: '1d' }
-    );
+    const jwtToken = generateToken(user);
 
     res.json({
       token: jwtToken,
@@ -113,6 +122,7 @@ export const googleLogin = async (req, res) => {
   }
 };
 
+// Get current user info
 export const getMe = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');

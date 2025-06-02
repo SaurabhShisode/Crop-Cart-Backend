@@ -5,7 +5,8 @@ import cors from 'cors';
 
 import authRoutes from './routes/userRoutes.js';
 import cropRoutes from './routes/cropRoutes.js';
-import ordersRoute from './routes/orderRoutes.js'; 
+import orderRoutes from './routes/orderRoutes.js';
+import farmerRoutes from './routes/farmerRoutes.js'; // farmer dashboard routes
 
 dotenv.config();
 
@@ -21,12 +22,13 @@ app.use(express.json());
 
 // ===== Routes =====
 app.use('/api/auth', authRoutes);
-app.use('/crops', cropRoutes);
-app.use('/api/orders', ordersRoute);
+app.use('/api/crops', cropRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/farmer', farmerRoutes); 
 
-// ===== Status Route =====
+// ===== Root Status Check =====
 app.get('/', (req, res) => {
-  res.send('CropCart Backend API is running');
+  res.send('🌾 CropCart Backend API is running');
 });
 
 // ===== MongoDB Connection =====

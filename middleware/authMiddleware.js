@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken';
+import User from '../models/User.js';
 
-const authMiddleware = (req, res, next) => {
+
+export const protect = async (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith('Bearer '))
@@ -10,11 +12,29 @@ const authMiddleware = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; 
+    const user = await User.findById(decoded.id).select('-password');
+
+    if (!user) return res.status(401).json({ message: 'User not found' });
+
+    req.user = user;
     next();
   } catch (err) {
     return res.status(401).json({ message: 'Invalid token' });
   }
 };
 
-export default authMiddleware;
+
+export const requireFarmer = (req, res, next) => {
+  if (req.user.role !== 'farmer') {
+    return res.status(403).json({ message: 'Access restricted to farmers' });
+  }
+  next();
+};
+
+
+export const requireUser = (req, res, next) => {
+  if (req.user.role !== 'user') {
+    return res.status(403).json({ message: 'Access restricted to users' });
+  }
+  next();
+};
