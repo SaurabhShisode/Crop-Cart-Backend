@@ -1,17 +1,17 @@
-const Crop = require('../models/Crops');
-const Order = require('../models/Order');
+import Crop from '../models/Crops.js';
+import Order from '../models/Order.js';
 
-exports.addCrop = async (req, res) => {
+export const addCrop = async (req, res) => {
   const crop = await Crop.create({ ...req.body, farmer: req.user._id });
   res.json(crop);
 };
 
-exports.getMyCrops = async (req, res) => {
+export const getMyCrops = async (req, res) => {
   const crops = await Crop.find({ farmer: req.user._id });
   res.json(crops);
 };
 
-exports.getEarnings = async (req, res) => {
+export const getEarnings = async (req, res) => {
   const lastMonth = new Date();
   lastMonth.setMonth(lastMonth.getMonth() - 1);
   const orders = await Order.find({ farmer: req.user._id, createdAt: { $gte: lastMonth } });
@@ -19,13 +19,13 @@ exports.getEarnings = async (req, res) => {
   res.json({ earnings });
 };
 
-exports.getTotalSold = async (req, res) => {
+export const getTotalSold = async (req, res) => {
   const orders = await Order.find({ farmer: req.user._id });
   const count = orders.reduce((sum, o) => sum + o.items.length, 0);
   res.json({ totalSold: count });
 };
 
-exports.getAnalytics = async (req, res) => {
+export const getAnalytics = async (req, res) => {
   const pipeline = [
     { $match: { farmer: req.user._id } },
     { $unwind: '$items' },
