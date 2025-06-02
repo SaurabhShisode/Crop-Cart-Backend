@@ -1,73 +1,40 @@
-import express from 'express';
-import Order from '../models/Order.js';
-import { protect } from '../middleware/authMiddleware.js';  // <-- named import
-import nodemailer from 'nodemailer';
+import jwt from 'jsonwebtoken';
+import User from '../models/User.js';
 
-const router = express.Router();
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,      
-    pass: process.env.EMAIL_PASSWORD,  
-  },
-});
+export const protect = async (req, res, next) => {
+  const authHeader = req.headers.authorization;
 
-router.post('/', async (req, res) => {
+  if (!authHeader || !authHeader.startsWith('Bearer '))
+    return res.status(401).json({ message: 'No token provided' });
+
+  const token = authHeader.split(' ')[1];
+
   try {
-    const newOrder = new Order(req.body);
-    await newOrder.save();
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id).select('-password');
 
-    const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: newOrder.email,
-      subject: 'Order Confirmation - CropCart',
-      html: `
-        <h2>Thank you for your order, ${newOrder.name}!</h2>
-        <p>Your order ID is <b>${newOrder._id}</b>.</p>
-        <p><b>Delivery Address:</b> ${newOrder.address}</p>
-        <p><b>Phone:</b> ${newOrder.phone}</p>
-        <h3>Items:</h3>
-        <ul>
-          ${newOrder.items.map(item => 
-            `<li>${item.name} — ${item.quantity} (${item.quantityInCart})</li>`).join('')}
-        </ul>
-        <p><b>Total:</b> ₹${newOrder.total}</p>
-        <p>We will notify you once your order is shipped.</p>
-        <p>Thanks for shopping with CropCart!</p>
-      `,
-    };
+    if (!user) return res.status(401).json({ message: 'User not found' });
 
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error('Error sending email:', error);
-      } else {
-        console.log('Order confirmation email sent:', info.response);
-      }
-    });
-
-    res.status(201).json({ message: 'Order placed successfully' });
+    req.user = user;
+    next();
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Failed to place order' });
+    return res.status(401).json({ message: 'Invalid token' });
   }
-});
+};
 
-// Use 'protect' middleware here instead of 'authMiddleware'
-router.get('/user/:userId', protect, async (req, res) => {
-  const { userId } = req.params;
-  console.log('Decoded JWT user:', req.user);
-  if (req.user.id !== userId) {
-    return res.status(403).json({ message: 'Unauthorized access' });
+
+export const requireFarmer = (req, res, next) => {
+  if (req.user.role !== 'farmer') {
+    return res.status(403).json({ message: 'Access restricted to farmers' });
   }
+  next();
+};
 
-  try {
-    const orders = await Order.find({ userId }).sort({ createdAt: -1 });
-    res.json(orders);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Failed to fetch orders' });
+
+export const requireUser = (req, res, next) => {
+  if (req.user.role !== 'user') {
+    return res.status(403).json({ message: 'Access restricted to users' });
   }
-});
-
-export default router;
+  next();
+};
