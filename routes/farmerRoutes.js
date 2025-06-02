@@ -5,6 +5,7 @@ import {
   getEarnings,
   getTotalSold,
   getAnalytics,
+  getMyOrders,  // import the new controller here
 } from '../controllers/farmerController.js';
 import { protect, requireFarmer } from '../middleware/authMiddleware.js';
 
@@ -17,5 +18,8 @@ router.get('/crops', getMyCrops);
 router.get('/earnings', getEarnings);
 router.get('/total-sold', getTotalSold);
 router.get('/analytics', getAnalytics);
+
+
+router.get('/orders', getMyOrders);
 
 export default router;

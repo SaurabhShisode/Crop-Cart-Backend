@@ -11,6 +11,15 @@ export const getMyCrops = async (req, res) => {
   res.json(crops);
 };
 
+export const getMyOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({ farmer: req.user._id }).populate('buyer', 'name email');
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to fetch orders' });
+  }
+};
+
 export const getEarnings = async (req, res) => {
   const lastMonth = new Date();
   lastMonth.setMonth(lastMonth.getMonth() - 1);
