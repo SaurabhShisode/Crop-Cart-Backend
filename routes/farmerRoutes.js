@@ -1,13 +1,14 @@
-const express = require('express');
-const router = express.Router();
-const {
+import express from 'express';
+import {
   addCrop,
   getMyCrops,
   getEarnings,
   getTotalSold,
   getAnalytics,
-} = require('../controllers/farmerController');
-const { protect, requireFarmer } = require('../middleware/authMiddleware');
+} from '../controllers/farmerController.js';
+import { protect, requireFarmer } from '../middleware/authMiddleware.js';
+
+const router = express.Router();
 
 router.use(protect, requireFarmer);
 
@@ -17,4 +18,4 @@ router.get('/earnings', getEarnings);
 router.get('/total-sold', getTotalSold);
 router.get('/analytics', getAnalytics);
 
-module.exports = router;
+export default router;
