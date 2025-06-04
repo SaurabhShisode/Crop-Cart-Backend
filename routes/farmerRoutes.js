@@ -21,6 +21,6 @@ router.get('/total-sold', getTotalSold);
 router.get('/analytics', getAnalytics);
 router.delete('/crops/:id', protect, requireFarmer, deleteCrop);
 
-router.get('/orders', getMyOrders);
+router.get('/farmer-orders', getMyOrders);
 
 export default router;
