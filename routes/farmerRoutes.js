@@ -5,7 +5,8 @@ import {
   getEarnings,
   getTotalSold,
   getAnalytics,
-  getMyOrders,  // import the new controller here
+  getMyOrders, 
+  deleteCrop 
 } from '../controllers/farmerController.js';
 import { protect, requireFarmer } from '../middleware/authMiddleware.js';
 
@@ -18,7 +19,7 @@ router.get('/crops', getMyCrops);
 router.get('/earnings', getEarnings);
 router.get('/total-sold', getTotalSold);
 router.get('/analytics', getAnalytics);
-
+router.delete('/crops/:id', protect, requireFarmer, deleteCrop);
 
 router.get('/orders', getMyOrders);
 
