@@ -13,7 +13,7 @@ export const getMyCrops = async (req, res) => {
 
 export const getMyOrders = async (req, res) => {
   try {
-    const orders = await Order.find({ farmer: req.user._id }).populate('buyer', 'name email');
+    const orders = await Order.find({ farmerId: req.user._id }).populate('userId', 'name email');
     res.json(orders);
   } catch (error) {
     res.status(500).json({ message: 'Failed to fetch orders' });
