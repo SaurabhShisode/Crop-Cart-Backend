@@ -6,7 +6,7 @@ import cors from 'cors';
 import authRoutes from './routes/userRoutes.js';
 import cropRoutes from './routes/cropRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
-import farmerRoutes from './routes/farmerRoutes.js'; // farmer dashboard routes
+import farmerRoutes from './routes/farmerRoutes.js'; 
 
 dotenv.config();
 
