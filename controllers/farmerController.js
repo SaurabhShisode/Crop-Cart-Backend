@@ -50,3 +50,22 @@ export const getAnalytics = async (req, res) => {
   const data = await Order.aggregate(pipeline);
   res.json(data);
 };
+
+export const deleteCrop = async (req, res) => {
+  try {
+    const crop = await Crop.findById(req.params.id);
+
+    if (!crop) {
+      return res.status(404).json({ message: 'Crop not found' });
+    }
+
+    if (crop.farmer.toString() !== req.user._id.toString()) {
+      return res.status(403).json({ message: 'Unauthorized to delete this crop' });
+    }
+
+    await crop.deleteOne();
+    res.json({ message: 'Crop deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: 'Server error deleting crop' });
+  }
+};
