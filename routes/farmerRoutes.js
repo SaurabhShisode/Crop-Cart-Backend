@@ -18,7 +18,7 @@ router.post('/crops', addCrop);
 router.get('/crops', getMyCrops);
 router.get('/earnings', getEarnings);
 router.get('/total-sold', getTotalSold);
-router.get('/analytics', getAnalytics);
+router.get('/stats', getAnalytics);
 router.delete('/crops/:id', protect, requireFarmer, deleteCrop);
 
 router.get('/orders', getMyOrders);
