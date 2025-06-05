@@ -20,36 +20,8 @@ export const getMyOrders = async (req, res) => {
   }
 };
 
-export const getEarnings = async (req, res) => {
-  const lastMonth = new Date();
-  lastMonth.setMonth(lastMonth.getMonth() - 1);
-  const orders = await Order.find({ farmer: req.user._id, createdAt: { $gte: lastMonth } });
-  const earnings = orders.reduce((sum, o) => sum + o.total, 0);
-  res.json({ earnings });
-};
 
-export const getTotalSold = async (req, res) => {
-  const orders = await Order.find({ farmer: req.user._id });
-  const count = orders.reduce((sum, o) => sum + o.items.length, 0);
-  res.json({ totalSold: count });
-};
 
-export const getAnalytics = async (req, res) => {
-  const pipeline = [
-    { $match: { farmer: req.user._id } },
-    { $unwind: '$items' },
-    {
-      $group: {
-        _id: { $month: '$createdAt' },
-        totalSales: { $sum: '$items.quantity' },
-        totalRevenue: { $sum: '$items.price' }
-      }
-    },
-    { $sort: { '_id': 1 } }
-  ];
-  const data = await Order.aggregate(pipeline);
-  res.json(data);
-};
 
 export const deleteCrop = async (req, res) => {
   try {
@@ -67,5 +39,74 @@ export const deleteCrop = async (req, res) => {
     res.json({ message: 'Crop deleted successfully' });
   } catch (error) {
     res.status(500).json({ message: 'Server error deleting crop' });
+  }
+};
+
+export const getFarmerAnalytics = async (req, res) => {
+  const farmerId = req.user._id; 
+
+  try {
+    const now = new Date();
+    const startOfYear = new Date(now.getFullYear(), 0, 1);
+    const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59);
+
+ 
+    const allOrders = await Order.aggregate([
+      {
+        $match: {
+          farmerId: new mongoose.Types.ObjectId(farmerId),
+          createdAt: { $gte: startOfYear }
+        }
+      },
+      {
+        $group: {
+          _id: { $month: '$createdAt' },
+          totalEarnings: { $sum: '$total' },
+          totalOrders: { $sum: 1 }
+        }
+      },
+      { $sort: { '_id': 1 } }
+    ]);
+
+    const monthlyEarnings = Array(12).fill(0);
+    const monthlyOrders = Array(12).fill(0);
+    allOrders.forEach((entry) => {
+      monthlyEarnings[entry._id - 1] = entry.totalEarnings;
+      monthlyOrders[entry._id - 1] = entry.totalOrders;
+    });
+
+   
+    const lastMonthOrders = await Order.aggregate([
+      {
+        $match: {
+          farmerId: new mongoose.Types.ObjectId(farmerId),
+          createdAt: {
+            $gte: lastMonthStart,
+            $lte: lastMonthEnd
+          }
+        }
+      },
+      {
+        $group: {
+          _id: null,
+          totalEarnings: { $sum: '$total' },
+          totalOrders: { $sum: 1 }
+        }
+      }
+    ]);
+
+    const lastMonthSummary = lastMonthOrders[0] || { totalEarnings: 0, totalOrders: 0 };
+
+    res.json({
+      lastMonthEarnings: lastMonthSummary.totalEarnings,
+      lastMonthOrders: lastMonthSummary.totalOrders,
+      monthlyEarnings,
+      monthlyOrders
+    });
+
+  } catch (error) {
+    console.error('Dashboard error:', error);
+    res.status(500).json({ message: 'Failed to load dashboard data' });
   }
 };
