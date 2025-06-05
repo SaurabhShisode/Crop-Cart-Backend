@@ -151,11 +151,9 @@ export const getFarmerAnalytics = async (req, res) => {
       },
       { $sort: { totalSold: -1 } },
       { $limit: 1 },
-
-      // Cast string ID to ObjectId
       {
         $addFields: {
-          cropObjectId: { $toObjectId: '$_id' },
+          cropObjectId: { $convert: { input: '$_id', to: 'objectId', onError: null, onNull: null } },
         },
       },
       {
@@ -166,7 +164,7 @@ export const getFarmerAnalytics = async (req, res) => {
           as: 'cropDetails',
         },
       },
-      { $unwind: '$cropDetails' },
+      { $unwind: { path: '$cropDetails', preserveNullAndEmptyArrays: false } },
       {
         $project: {
           cropName: 1,
@@ -175,6 +173,7 @@ export const getFarmerAnalytics = async (req, res) => {
         },
       },
     ]);
+
 
 
 
