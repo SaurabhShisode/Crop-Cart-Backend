@@ -140,40 +140,51 @@ export const getFarmerAnalytics = async (req, res) => {
       weeklyOrders.push(entry?.totalOrders || 0);
     }
     const mostSoldCrop = await Order.aggregate([
-      { $match: { farmerId: new mongoose.Types.ObjectId(farmerId) } },
-      { $unwind: '$items' },
-      {
-        $group: {
-          _id: '$items.cropId',
-          cropName: { $first: '$items.name' },
-          totalSold: { $sum: '$items.quantityInCart' },
-        },
-      },
-      { $sort: { totalSold: -1 } },
-      { $limit: 1 },
+  { $match: { farmerId: new mongoose.Types.ObjectId(farmerId) } },
+  { $unwind: '$items' },
+  {
+    $group: {
+      _id: '$items.cropId',
+      cropName: { $first: '$items.name' },
+      totalSold: { $sum: '$items.quantityInCart' },
+    },
+  },
+  { $sort: { totalSold: -1 } },
+  { $limit: 1 },
 
-      
-      {
-        $lookup: {
-          from: 'crops',             
-          localField: '_id',         
-          foreignField: '_id',       
-          as: 'cropDetails',
-        },
-      },
 
-      
-      { $unwind: '$cropDetails' },
+  {
+    $addFields: {
+      cropObjectId: {
+        $cond: [
+          { $eq: [{ $type: '$_id' }, 'objectId'] },
+          '$_id',
+          { $toObjectId: '$_id' }
+        ]
+      }
+    }
+  },
 
-      
-      {
-        $project: {
-          cropName: 1,
-          totalSold: 1,
-          image: '$cropDetails.image',
-        },
-      },
-    ]);
+
+  {
+    $lookup: {
+      from: 'crops',
+      localField: 'cropObjectId',
+      foreignField: '_id',
+      as: 'cropDetails',
+    },
+  },
+  { $unwind: '$cropDetails' },
+
+
+  {
+    $project: {
+      cropName: 1,
+      totalSold: 1,
+      image: '$cropDetails.image',
+    },
+  },
+]);
 
 
     res.json({
