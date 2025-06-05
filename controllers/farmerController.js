@@ -144,7 +144,7 @@ export const getFarmerAnalytics = async (req, res) => {
       { $unwind: '$items' },
       {
         $group: {
-          _id: '$items._id',
+          _id: '$items.cropId',
           cropName: { $first: '$items.name' },
           totalSold: { $sum: '$items.quantityInCart' },
         },
