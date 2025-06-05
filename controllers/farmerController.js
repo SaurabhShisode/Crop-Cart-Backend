@@ -140,18 +140,18 @@ export const getFarmerAnalytics = async (req, res) => {
       weeklyOrders.push(entry?.totalOrders || 0);
     }
     const mostSoldCrop = await Order.aggregate([
-      { $unwind: '$items' },
-      { $match: { 'items.farmerId': new mongoose.Types.ObjectId(farmerId) } },
-      {
-        $group: {
-          _id: '$items.cropId',
-          cropName: { $first: '$items.name' },
-          totalSold: { $sum: '$items.quantity' },
-        },
-      },
-      { $sort: { totalSold: -1 } },
-      { $limit: 1 },
-    ]);
+  { $match: { farmerId: new mongoose.Types.ObjectId(farmerId) } }, 
+  { $unwind: '$items' },
+  {
+    $group: {
+      _id: '$items.cropId',
+      cropName: { $first: '$items.name' },
+      totalSold: { $sum: '$items.quantity' },
+    },
+  },
+  { $sort: { totalSold: -1 } },
+  { $limit: 1 },
+]);
 
     res.json({
       currentMonthEarnings: currentMonthSummary.totalEarnings,
