@@ -51,12 +51,10 @@ export const getFarmerAnalytics = async (req, res) => {
   try {
     const now = new Date();
     const startOfYear = new Date(now.getFullYear(), 0, 1);
-  
     const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-    
     const currentMonthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
 
-    
+    // Monthly Orders & Earnings
     const allOrders = await Order.aggregate([
       {
         $match: {
@@ -74,7 +72,7 @@ export const getFarmerAnalytics = async (req, res) => {
       { $sort: { '_id': 1 } },
     ]);
 
-    
+    // Current Month Summary
     const currentMonthOrders = await Order.aggregate([
       {
         $match: {
@@ -103,12 +101,56 @@ export const getFarmerAnalytics = async (req, res) => {
 
     const currentMonthSummary = currentMonthOrders[0] || { totalEarnings: 0, totalOrders: 0 };
 
+    // Weekly Data (last 7 days)
+    const startOfWeek = new Date(now);
+    startOfWeek.setDate(now.getDate() - 6); 
+
+    const weeklyData = await Order.aggregate([
+      {
+        $match: {
+          farmerId: new mongoose.Types.ObjectId(farmerId),
+          createdAt: { $gte: startOfWeek },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: '%Y-%m-%d', date: '$createdAt' },
+          },
+          totalEarnings: { $sum: { $ifNull: ['$total', 0] } },
+          totalOrders: { $sum: 1 },
+        },
+      },
+      { $sort: { '_id': 1 } },
+    ]);
+
+    
+    const weeklyLabels = [];
+    const weeklyEarnings = [];
+    const weeklyOrders = [];
+
+    for (let i = 6; i >= 0; i--) {
+      const day = new Date(now);
+      day.setDate(now.getDate() - i);
+      const label = day.toISOString().split('T')[0];
+      weeklyLabels.push(label);
+
+      const entry = weeklyData.find((e) => e._id === label);
+      weeklyEarnings.push(entry?.totalEarnings || 0);
+      weeklyOrders.push(entry?.totalOrders || 0);
+    }
+
+    
     res.json({
       currentMonthEarnings: currentMonthSummary.totalEarnings,
       currentMonthOrders: currentMonthSummary.totalOrders,
       monthlyEarnings,
       monthlyOrders,
+      weeklyLabels,
+      weeklyEarnings,
+      weeklyOrders,
     });
+
   } catch (error) {
     console.error('Dashboard error:', error);
     res.status(500).json({ message: 'Failed to load dashboard data', error: error.message });
