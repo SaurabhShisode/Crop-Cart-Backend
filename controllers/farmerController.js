@@ -44,8 +44,6 @@ export const deleteCrop = async (req, res) => {
 export const getFarmerAnalytics = async (req, res) => {
   const farmerId = req.user?._id;
 
-  console.log('Farmer ID:', farmerId?.toString());
-
   if (!farmerId) {
     return res.status(401).json({ message: 'Unauthorized: farmerId missing' });
   }
@@ -53,10 +51,12 @@ export const getFarmerAnalytics = async (req, res) => {
   try {
     const now = new Date();
     const startOfYear = new Date(now.getFullYear(), 0, 1);
-    const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-    const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59);
+  
+    const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    
+    const currentMonthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
 
-    // Aggregate all orders from start of the year
+    
     const allOrders = await Order.aggregate([
       {
         $match: {
@@ -74,23 +74,14 @@ export const getFarmerAnalytics = async (req, res) => {
       { $sort: { '_id': 1 } },
     ]);
 
-    console.log('allOrders:', allOrders);
-
-    const monthlyEarnings = Array(12).fill(0);
-    const monthlyOrders = Array(12).fill(0);
-    allOrders.forEach((entry) => {
-      monthlyEarnings[entry._id - 1] = entry.totalEarnings;
-      monthlyOrders[entry._id - 1] = entry.totalOrders;
-    });
-
-    // Aggregate orders from last month only
-    const lastMonthOrders = await Order.aggregate([
+    
+    const currentMonthOrders = await Order.aggregate([
       {
         $match: {
           farmerId: new mongoose.Types.ObjectId(farmerId),
           createdAt: {
-            $gte: lastMonthStart,
-            $lte: lastMonthEnd,
+            $gte: currentMonthStart,
+            $lte: currentMonthEnd,
           },
         },
       },
@@ -103,13 +94,18 @@ export const getFarmerAnalytics = async (req, res) => {
       },
     ]);
 
-    console.log('lastMonthOrders:', lastMonthOrders);
+    const monthlyEarnings = Array(12).fill(0);
+    const monthlyOrders = Array(12).fill(0);
+    allOrders.forEach((entry) => {
+      monthlyEarnings[entry._id - 1] = entry.totalEarnings;
+      monthlyOrders[entry._id - 1] = entry.totalOrders;
+    });
 
-    const lastMonthSummary = lastMonthOrders[0] || { totalEarnings: 0, totalOrders: 0 };
+    const currentMonthSummary = currentMonthOrders[0] || { totalEarnings: 0, totalOrders: 0 };
 
     res.json({
-      lastMonthEarnings: lastMonthSummary.totalEarnings,
-      lastMonthOrders: lastMonthSummary.totalOrders,
+      currentMonthEarnings: currentMonthSummary.totalEarnings,
+      currentMonthOrders: currentMonthSummary.totalOrders,
       monthlyEarnings,
       monthlyOrders,
     });
