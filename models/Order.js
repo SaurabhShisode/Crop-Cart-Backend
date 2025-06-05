@@ -4,12 +4,12 @@ const orderSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User', 
+      ref: 'User',
       required: true,
     },
     farmerId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User', 
+      ref: 'User',
       required: true,
     },
     name: { type: String, required: true },
@@ -19,14 +19,11 @@ const orderSchema = new mongoose.Schema(
 
     items: [
       {
-        cropId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Crop',
-          required: true,
-        },
+        cropId: String,
         name: String,
         price: Number,
-        quantity: String,
+        quantity: String,          
+        quantityInCart: Number,    
       },
     ],
 
