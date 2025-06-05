@@ -146,7 +146,7 @@ export const getFarmerAnalytics = async (req, res) => {
     $group: {
       _id: '$items.cropId',
       cropName: { $first: '$items.name' },
-      totalSold: { $sum: '$items.quantity' },
+      totalSold: { $sum: '$items.quantityInCart' },
     },
   },
   { $sort: { totalSold: -1 } },
