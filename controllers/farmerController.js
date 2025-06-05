@@ -103,7 +103,7 @@ export const getFarmerAnalytics = async (req, res) => {
 
     // Weekly Data (last 7 days)
     const startOfWeek = new Date(now);
-    startOfWeek.setDate(now.getDate() - 6); 
+    startOfWeek.setDate(now.getDate() - 6);
 
     const weeklyData = await Order.aggregate([
       {
@@ -124,7 +124,8 @@ export const getFarmerAnalytics = async (req, res) => {
       { $sort: { '_id': 1 } },
     ]);
 
-    
+
+    // After your weekly loop logic
     const weeklyLabels = [];
     const weeklyEarnings = [];
     const weeklyOrders = [];
@@ -140,7 +141,11 @@ export const getFarmerAnalytics = async (req, res) => {
       weeklyOrders.push(entry?.totalOrders || 0);
     }
 
-    
+
+    const totalWeeklyEarnings = weeklyEarnings.reduce((sum, val) => sum + val, 0);
+    const totalWeeklyOrders = weeklyOrders.reduce((sum, val) => sum + val, 0);
+
+
     res.json({
       currentMonthEarnings: currentMonthSummary.totalEarnings,
       currentMonthOrders: currentMonthSummary.totalOrders,
@@ -149,7 +154,10 @@ export const getFarmerAnalytics = async (req, res) => {
       weeklyLabels,
       weeklyEarnings,
       weeklyOrders,
+      totalWeeklyEarnings,
+      totalWeeklyOrders,
     });
+
 
   } catch (error) {
     console.error('Dashboard error:', error);
