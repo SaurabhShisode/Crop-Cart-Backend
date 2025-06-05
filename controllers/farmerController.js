@@ -103,7 +103,7 @@ export const getFarmerAnalytics = async (req, res) => {
 
     // Weekly Data (last 7 days)
     const startOfWeek = new Date(now);
-    startOfWeek.setDate(now.getDate() - 6); 
+    startOfWeek.setDate(now.getDate() - 6);
 
     const weeklyData = await Order.aggregate([
       {
@@ -124,7 +124,7 @@ export const getFarmerAnalytics = async (req, res) => {
       { $sort: { '_id': 1 } },
     ]);
 
-    
+
     const weeklyLabels = [];
     const weeklyEarnings = [];
     const weeklyOrders = [];
@@ -139,8 +139,20 @@ export const getFarmerAnalytics = async (req, res) => {
       weeklyEarnings.push(entry?.totalEarnings || 0);
       weeklyOrders.push(entry?.totalOrders || 0);
     }
+    const mostSoldCrop = await Order.aggregate([
+      { $unwind: '$items' },
+      { $match: { 'items.farmerId': new mongoose.Types.ObjectId(farmerId) } },
+      {
+        $group: {
+          _id: '$items.cropId',
+          cropName: { $first: '$items.name' },
+          totalSold: { $sum: '$items.quantity' },
+        },
+      },
+      { $sort: { totalSold: -1 } },
+      { $limit: 1 },
+    ]);
 
-    
     res.json({
       currentMonthEarnings: currentMonthSummary.totalEarnings,
       currentMonthOrders: currentMonthSummary.totalOrders,
@@ -149,6 +161,7 @@ export const getFarmerAnalytics = async (req, res) => {
       weeklyLabels,
       weeklyEarnings,
       weeklyOrders,
+      mostSoldCrop: mostSoldCrop[0] || null,
     });
 
   } catch (error) {
