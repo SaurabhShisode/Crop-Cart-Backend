@@ -41,9 +41,14 @@ export const deleteCrop = async (req, res) => {
     res.status(500).json({ message: 'Server error deleting crop' });
   }
 };
-
 export const getFarmerAnalytics = async (req, res) => {
-  const farmerId = req.user._id; 
+  const farmerId = req.user?._id;
+
+  console.log('Farmer ID:', farmerId?.toString());
+
+  if (!farmerId) {
+    return res.status(401).json({ message: 'Unauthorized: farmerId missing' });
+  }
 
   try {
     const now = new Date();
@@ -51,23 +56,25 @@ export const getFarmerAnalytics = async (req, res) => {
     const lastMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
     const lastMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59);
 
- 
+    // Aggregate all orders from start of the year
     const allOrders = await Order.aggregate([
       {
         $match: {
           farmerId: new mongoose.Types.ObjectId(farmerId),
-          createdAt: { $gte: startOfYear }
-        }
+          createdAt: { $gte: startOfYear },
+        },
       },
       {
         $group: {
           _id: { $month: '$createdAt' },
-          totalEarnings: { $sum: '$total' },
-          totalOrders: { $sum: 1 }
-        }
+          totalEarnings: { $sum: { $ifNull: ['$total', 0] } },
+          totalOrders: { $sum: 1 },
+        },
       },
-      { $sort: { '_id': 1 } }
+      { $sort: { '_id': 1 } },
     ]);
+
+    console.log('allOrders:', allOrders);
 
     const monthlyEarnings = Array(12).fill(0);
     const monthlyOrders = Array(12).fill(0);
@@ -76,25 +83,27 @@ export const getFarmerAnalytics = async (req, res) => {
       monthlyOrders[entry._id - 1] = entry.totalOrders;
     });
 
-   
+    // Aggregate orders from last month only
     const lastMonthOrders = await Order.aggregate([
       {
         $match: {
           farmerId: new mongoose.Types.ObjectId(farmerId),
           createdAt: {
             $gte: lastMonthStart,
-            $lte: lastMonthEnd
-          }
-        }
+            $lte: lastMonthEnd,
+          },
+        },
       },
       {
         $group: {
           _id: null,
-          totalEarnings: { $sum: '$total' },
-          totalOrders: { $sum: 1 }
-        }
-      }
+          totalEarnings: { $sum: { $ifNull: ['$total', 0] } },
+          totalOrders: { $sum: 1 },
+        },
+      },
     ]);
+
+    console.log('lastMonthOrders:', lastMonthOrders);
 
     const lastMonthSummary = lastMonthOrders[0] || { totalEarnings: 0, totalOrders: 0 };
 
@@ -102,11 +111,10 @@ export const getFarmerAnalytics = async (req, res) => {
       lastMonthEarnings: lastMonthSummary.totalEarnings,
       lastMonthOrders: lastMonthSummary.totalOrders,
       monthlyEarnings,
-      monthlyOrders
+      monthlyOrders,
     });
-
   } catch (error) {
     console.error('Dashboard error:', error);
-    res.status(500).json({ message: 'Failed to load dashboard data' });
+    res.status(500).json({ message: 'Failed to load dashboard data', error: error.message });
   }
 };
