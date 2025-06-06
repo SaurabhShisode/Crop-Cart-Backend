@@ -70,4 +70,27 @@ router.get('/user/:userId', protect, async (req, res) => {
   }
 });
 
+
+router.delete('/:id', protect, async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    
+    if (order.userId.toString() !== req.user.id) {
+      return res.status(403).json({ message: 'You are not authorized to delete this order' });
+    }
+
+    await order.deleteOne();
+
+    res.status(200).json({ message: 'Order deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting order:', error);
+    res.status(500).json({ message: 'Failed to delete order' });
+  }
+});
+
 export default router;
