@@ -1,27 +1,39 @@
 import Crop from '../models/Crops.js';
 import Order from '../models/Order.js';
 import mongoose from 'mongoose';
+
+
 export const addCrop = async (req, res) => {
-  const crop = await Crop.create({ ...req.body, farmer: req.user._id });
-  res.json(crop);
-};
-
-export const getMyCrops = async (req, res) => {
-  const crops = await Crop.find({ farmer: req.user._id });
-  res.json(crops);
-};
-
-export const getMyOrders = async (req, res) => {
   try {
-    const orders = await Order.find({ farmerId: req.user._id }).populate('userId', 'name email');
-    res.json(orders);
+    const crop = await Crop.create({ ...req.body, farmer: req.user._id });
+    res.json(crop);
   } catch (error) {
-    res.status(500).json({ message: 'Failed to fetch orders' });
+    res.status(500).json({ message: 'Failed to add crop', error: error.message });
   }
 };
 
 
+export const getMyCrops = async (req, res) => {
+  try {
+    const crops = await Crop.find({ farmer: req.user._id });
+    res.json(crops);
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to fetch crops', error: error.message });
+  }
+};
 
+
+export const getMyOrders = async (req, res) => {
+  try {
+  
+    const orders = await Order.find({
+      'items.farmerId': req.user._id,
+    }).populate('userId', 'name email');
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to fetch orders', error: error.message });
+  }
+};
 
 export const deleteCrop = async (req, res) => {
   try {
@@ -38,9 +50,11 @@ export const deleteCrop = async (req, res) => {
     await crop.deleteOne();
     res.json({ message: 'Crop deleted successfully' });
   } catch (error) {
-    res.status(500).json({ message: 'Server error deleting crop' });
+    res.status(500).json({ message: 'Server error deleting crop', error: error.message });
   }
 };
+
+
 export const getFarmerAnalytics = async (req, res) => {
   const farmerId = req.user?._id;
 
@@ -54,46 +68,69 @@ export const getFarmerAnalytics = async (req, res) => {
     const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
     const currentMonthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
 
-    // Monthly Orders & Earnings
+
     const allOrders = await Order.aggregate([
       {
         $match: {
-          farmerId: new mongoose.Types.ObjectId(farmerId),
+          'items.farmerId': new mongoose.Types.ObjectId(farmerId),
           createdAt: { $gte: startOfYear },
+        },
+      },
+      { $unwind: '$items' },
+      {
+        $match: {
+          'items.farmerId': new mongoose.Types.ObjectId(farmerId),
         },
       },
       {
         $group: {
           _id: { $month: '$createdAt' },
-          totalEarnings: { $sum: { $ifNull: ['$total', 0] } },
-          totalOrders: { $sum: 1 },
+          totalEarnings: { $sum: { $multiply: ['$items.price', { $toDouble: '$items.quantityInCart' }] } },
+          totalOrders: { $addToSet: '$_id' }, // Use set to count unique orders
+        },
+      },
+      {
+        $project: {
+          totalEarnings: 1,
+          totalOrders: { $size: '$totalOrders' },
         },
       },
       { $sort: { '_id': 1 } },
     ]);
 
-    // Current Month Summary
+
     const currentMonthOrders = await Order.aggregate([
       {
         $match: {
-          farmerId: new mongoose.Types.ObjectId(farmerId),
-          createdAt: {
-            $gte: currentMonthStart,
-            $lte: currentMonthEnd,
-          },
+          'items.farmerId': new mongoose.Types.ObjectId(farmerId),
+          createdAt: { $gte: currentMonthStart, $lte: currentMonthEnd },
+        },
+      },
+      { $unwind: '$items' },
+      {
+        $match: {
+          'items.farmerId': new mongoose.Types.ObjectId(farmerId),
         },
       },
       {
         $group: {
           _id: null,
-          totalEarnings: { $sum: { $ifNull: ['$total', 0] } },
-          totalOrders: { $sum: 1 },
+          totalEarnings: { $sum: { $multiply: ['$items.price', { $toDouble: '$items.quantityInCart' }] } },
+          totalOrders: { $addToSet: '$_id' },
+        },
+      },
+      {
+        $project: {
+          totalEarnings: 1,
+          totalOrders: { $size: '$totalOrders' },
         },
       },
     ]);
 
+    
     const monthlyEarnings = Array(12).fill(0);
     const monthlyOrders = Array(12).fill(0);
+
     allOrders.forEach((entry) => {
       monthlyEarnings[entry._id - 1] = entry.totalEarnings;
       monthlyOrders[entry._id - 1] = entry.totalOrders;
@@ -101,15 +138,21 @@ export const getFarmerAnalytics = async (req, res) => {
 
     const currentMonthSummary = currentMonthOrders[0] || { totalEarnings: 0, totalOrders: 0 };
 
-    // Weekly Data (last 7 days)
+
     const startOfWeek = new Date(now);
     startOfWeek.setDate(now.getDate() - 6);
 
     const weeklyData = await Order.aggregate([
       {
         $match: {
-          farmerId: new mongoose.Types.ObjectId(farmerId),
+          'items.farmerId': new mongoose.Types.ObjectId(farmerId),
           createdAt: { $gte: startOfWeek },
+        },
+      },
+      { $unwind: '$items' },
+      {
+        $match: {
+          'items.farmerId': new mongoose.Types.ObjectId(farmerId),
         },
       },
       {
@@ -117,14 +160,20 @@ export const getFarmerAnalytics = async (req, res) => {
           _id: {
             $dateToString: { format: '%Y-%m-%d', date: '$createdAt' },
           },
-          totalEarnings: { $sum: { $ifNull: ['$total', 0] } },
-          totalOrders: { $sum: 1 },
+          totalEarnings: { $sum: { $multiply: ['$items.price', { $toDouble: '$items.quantityInCart' }] } },
+          totalOrders: { $addToSet: '$_id' },
+        },
+      },
+      {
+        $project: {
+          totalEarnings: 1,
+          totalOrders: { $size: '$totalOrders' },
         },
       },
       { $sort: { '_id': 1 } },
     ]);
 
-
+    
     const weeklyLabels = [];
     const weeklyEarnings = [];
     const weeklyOrders = [];
@@ -139,21 +188,21 @@ export const getFarmerAnalytics = async (req, res) => {
       weeklyEarnings.push(entry?.totalEarnings || 0);
       weeklyOrders.push(entry?.totalOrders || 0);
     }
+
+  
     const mostSoldCrop = await Order.aggregate([
-      { $match: { farmerId: new mongoose.Types.ObjectId(farmerId) } },
       { $unwind: '$items' },
+      { $match: { 'items.farmerId': new mongoose.Types.ObjectId(farmerId) } },
       {
         $group: {
           _id: '$items.cropId',
           cropName: { $first: '$items.name' },
-          totalSold: { $sum: '$items.quantityInCart' },
+          totalSold: { $sum: { $toDouble: '$items.quantityInCart' } },
         },
       },
       { $sort: { totalSold: -1 } },
       { $limit: 1 },
     ]);
-
-
 
     res.json({
       currentMonthEarnings: currentMonthSummary.totalEarnings,
@@ -165,7 +214,6 @@ export const getFarmerAnalytics = async (req, res) => {
       weeklyOrders,
       mostSoldCrop: mostSoldCrop[0] || null,
     });
-
   } catch (error) {
     console.error('Dashboard error:', error);
     res.status(500).json({ message: 'Failed to load dashboard data', error: error.message });
