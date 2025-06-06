@@ -7,11 +7,6 @@ const orderSchema = new mongoose.Schema(
       ref: 'User',
       required: true,
     },
-    farmerId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
     name: { type: String, required: true },
     email: { type: String, required: true },
     phone: { type: String, required: true },
@@ -22,8 +17,13 @@ const orderSchema = new mongoose.Schema(
         cropId: String,
         name: String,
         price: Number,
-        quantity: String,          
-        quantityInCart: Number,    
+        quantity: String,
+        quantityInCart: Number,
+        farmerId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User',
+          required: true,
+        },
       },
     ],
 
