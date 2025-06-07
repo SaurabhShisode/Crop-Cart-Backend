@@ -25,7 +25,7 @@ export const getMyCrops = async (req, res) => {
 
 export const getMyOrders = async (req, res) => {
   try {
-  
+
     const orders = await Order.find({
       'items.farmerId': req.user._id,
     }).populate('userId', 'name email');
@@ -85,8 +85,16 @@ export const getFarmerAnalytics = async (req, res) => {
       {
         $group: {
           _id: { $month: '$createdAt' },
-          totalEarnings: { $sum: { $multiply: ['$items.price', { $toDouble: '$items.quantityInCart' }] } },
-          totalOrders: { $addToSet: '$_id' }, // Use set to count unique orders
+          totalEarnings: {
+            $sum: {
+              $multiply: [
+                { $multiply: ['$items.price', { $toDouble: '$items.quantityInCart' }] },
+                1.18
+              ]
+            }
+          },
+
+          totalOrders: { $addToSet: '$_id' },
         },
       },
       {
@@ -115,7 +123,14 @@ export const getFarmerAnalytics = async (req, res) => {
       {
         $group: {
           _id: null,
-          totalEarnings: { $sum: { $multiply: ['$items.price', { $toDouble: '$items.quantityInCart' }] } },
+          totalEarnings: {
+            $sum: {
+              $multiply: [
+                { $multiply: ['$items.price', { $toDouble: '$items.quantityInCart' }] },
+                1.18
+              ]
+            }
+          },
           totalOrders: { $addToSet: '$_id' },
         },
       },
@@ -127,7 +142,7 @@ export const getFarmerAnalytics = async (req, res) => {
       },
     ]);
 
-    
+
     const monthlyEarnings = Array(12).fill(0);
     const monthlyOrders = Array(12).fill(0);
 
@@ -160,7 +175,15 @@ export const getFarmerAnalytics = async (req, res) => {
           _id: {
             $dateToString: { format: '%Y-%m-%d', date: '$createdAt' },
           },
-          totalEarnings: { $sum: { $multiply: ['$items.price', { $toDouble: '$items.quantityInCart' }] } },
+          totalEarnings: {
+            $sum: {
+              $multiply: [
+                { $multiply: ['$items.price', { $toDouble: '$items.quantityInCart' }] },
+                1.18
+              ]
+            }
+          },
+
           totalOrders: { $addToSet: '$_id' },
         },
       },
@@ -173,7 +196,7 @@ export const getFarmerAnalytics = async (req, res) => {
       { $sort: { '_id': 1 } },
     ]);
 
-    
+
     const weeklyLabels = [];
     const weeklyEarnings = [];
     const weeklyOrders = [];
@@ -189,7 +212,7 @@ export const getFarmerAnalytics = async (req, res) => {
       weeklyOrders.push(entry?.totalOrders || 0);
     }
 
-  
+
     const mostSoldCrop = await Order.aggregate([
       { $unwind: '$items' },
       { $match: { 'items.farmerId': new mongoose.Types.ObjectId(farmerId) } },
