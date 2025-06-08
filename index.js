@@ -15,9 +15,20 @@ const PORT = process.env.PORT || 5000;
 
 // ===== Middleware =====
 app.use(cors({
-  origin: ['http://localhost:5173', 'https://crop-cart-rose.vercel.app'],
+  origin: (origin, callback) => {
+    if (
+      !origin ||
+      origin.startsWith('http://localhost:') ||
+      origin === 'https://crop-cart-rose.vercel.app'
+    ) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
 }));
+
 app.use(express.json());
 
 // ===== Routes =====
