@@ -58,16 +58,26 @@ export const registerFarmer = async (req, res) => {
 // Login user (Email & Password)
 export const loginUser = async (req, res) => {
   const { email, password } = req.body;
-
+  
   try {
+    // Find user by email
     const user = await User.findOne({ email });
-    if (!user || !user.password)
+    if (!user) {
       return res.status(400).json({ message: 'Invalid email or password' });
+    }
 
+    // Check if user has a password (in case they signed up via OAuth)
+    if (!user.password) {
+      return res.status(400).json({ message: 'Please use the correct login method' });
+    }
+
+    // Compare passwords
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch)
+    if (!isMatch) {
       return res.status(400).json({ message: 'Invalid email or password' });
+    }
 
+    // Generate token and send response
     const token = generateToken(user);
 
     res.json({
