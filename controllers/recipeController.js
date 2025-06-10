@@ -1,11 +1,18 @@
 import { Groq } from 'groq-sdk';
 import { config } from 'dotenv';
-import Crop from '../models/Crop.js';
-import extractIngredientsFromText from '../utils/extractIngredientsFromText.js';
+import Crop from '../models/Crops.js';
 
 config(); // Load environment variables
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+
+// Basic ingredient extraction function inlined
+function extractIngredientsFromText(text) {
+  return text
+    .split(',')
+    .map(item => item.trim().toLowerCase())
+    .filter(item => item.length > 0);
+}
 
 export const getMatchedIngredientsFromDB = async (req, res) => {
   const { mealName } = req.body;
@@ -26,14 +33,17 @@ export const getMatchedIngredientsFromDB = async (req, res) => {
           content: `List only the ingredients needed for the meal: "${mealName}". Do not add instructions.`
         }
       ],
-      model: 'llama-3.1-8b-instant', // ✅ You asked for this model
+      model: 'llama-3.1-8b-instant',
       temperature: 0.5,
       max_tokens: 500,
       top_p: 1
     });
 
     const rawIngredientsText = chatCompletion.choices[0]?.message?.content || '';
+    console.log('🧠 AI response:', rawIngredientsText);
+
     const extractedIngredients = extractIngredientsFromText(rawIngredientsText);
+    console.log('🧪 Extracted ingredients:', extractedIngredients);
 
     const crops = await Crop.find({
       name: { $in: extractedIngredients }
@@ -45,7 +55,7 @@ export const getMatchedIngredientsFromDB = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Error in getMatchedIngredientsFromDB:', error.response?.data || error.message);
+    console.error('❌ Error in getMatchedIngredientsFromDB:', error.response?.data || error.message);
 
     if (
       error.response?.data?.error?.message?.toLowerCase().includes('insufficient balance') ||
