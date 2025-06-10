@@ -6,9 +6,10 @@ config(); // Load environment variables
 
 const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-// Basic ingredient extraction function inlined
+// ✅ Improved ingredient extractor
 function extractIngredientsFromText(text) {
   return text
+    .replace(/[^a-zA-Z0-9, ]/g, '') // Remove punctuation
     .split(',')
     .map(item => item.trim().toLowerCase())
     .filter(item => item.length > 0);
@@ -22,15 +23,17 @@ export const getMatchedIngredientsFromDB = async (req, res) => {
   }
 
   try {
+    console.log('📥 Received meal name:', mealName);
+
     const chatCompletion = await groq.chat.completions.create({
       messages: [
         {
           role: 'system',
-          content: 'You are a helpful chef who returns a comma-separated list of ingredients for a given meal.'
+          content: 'Return only a comma-separated list of raw ingredients with no explanation, no instructions.'
         },
         {
           role: 'user',
-          content: `List only the ingredients needed for the meal: "${mealName}". Do not add instructions.`
+          content: `Give only ingredients for "${mealName}". Like: paneer, tomato, onion, garlic. No extra words.`
         }
       ],
       model: 'llama-3.1-8b-instant',
@@ -40,7 +43,7 @@ export const getMatchedIngredientsFromDB = async (req, res) => {
     });
 
     const rawIngredientsText = chatCompletion.choices[0]?.message?.content || '';
-    console.log('🧠 AI response:', rawIngredientsText);
+    console.log('🧠 AI raw response:', rawIngredientsText);
 
     const extractedIngredients = extractIngredientsFromText(rawIngredientsText);
     console.log('🧪 Extracted ingredients:', extractedIngredients);
@@ -49,17 +52,20 @@ export const getMatchedIngredientsFromDB = async (req, res) => {
       name: { $in: extractedIngredients }
     });
 
+    console.log('🌾 Matched crops from DB:', crops);
+
     res.json({
       matchedIngredients: crops,
       allIngredientsFromAI: extractedIngredients
     });
 
   } catch (error) {
-    console.error('❌ Error in getMatchedIngredientsFromDB:', error.response?.data || error.message);
+    const errData = error.response?.data || error.message;
+    console.error('❌ Error in getMatchedIngredientsFromDB:', errData);
 
     if (
-      error.response?.data?.error?.message?.toLowerCase().includes('insufficient balance') ||
-      error.response?.data?.error?.code === 'invalid_request_error'
+      errData?.error?.message?.toLowerCase().includes('insufficient balance') ||
+      errData?.error?.code === 'invalid_request_error'
     ) {
       return res.status(402).json({
         error: 'API quota exceeded or model access issue.'
