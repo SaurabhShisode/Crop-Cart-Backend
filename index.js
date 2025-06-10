@@ -7,7 +7,7 @@ import authRoutes from './routes/userRoutes.js';
 import cropRoutes from './routes/cropRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import farmerRoutes from './routes/farmerRoutes.js'; 
-
+import recipeRoutes from './routes/recipeRoute.js';
 dotenv.config();
 
 const app = express();
@@ -36,6 +36,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/crops', cropRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/farmer', farmerRoutes); 
+
+app.use('/api/recipes', recipeRoutes);
 
 // ===== Root Status Check =====
 app.get('/', (req, res) => {
