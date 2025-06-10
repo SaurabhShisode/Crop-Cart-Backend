@@ -1,3 +1,23 @@
+import { Groq } from 'groq-sdk';
+import dotenv from 'dotenv';
+import Crop from '../models/Crop.js';
+
+dotenv.config();
+
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY,
+});
+
+// Helper function directly included
+function extractIngredientsFromText(text) {
+  if (!text || typeof text !== 'string') return [];
+
+  return text
+    .split(',')
+    .map(item => item.trim().toLowerCase())
+    .filter(item => item.length > 0);
+}
+
 export const getMatchedIngredientsFromDB = async (req, res) => {
   const { mealName } = req.body;
 
@@ -6,32 +26,24 @@ export const getMatchedIngredientsFromDB = async (req, res) => {
   }
 
   try {
-    const response = await axios.post(
-      'https://api.deepseek.com/v1/chat/completions',
-      {
-        model: 'deepseek-chat',
-        messages: [
-          {
-            role: 'system',
-            content: 'You are a helpful chef who returns a comma-separated list of ingredients for a given meal.'
-          },
-          {
-            role: 'user',
-            content: `List only the ingredients needed for the meal: "${mealName}". Do not add instructions.`
-          }
-        ],
-        temperature: 0.5,
-        max_tokens: 500
-      },
-      {
-        headers: {
-          'Authorization': `Bearer ${process.env.DEEPSEEK_API_KEY}`,
-          'Content-Type': 'application/json'
+    const chatCompletion = await groq.chat.completions.create({
+      messages: [
+        {
+          role: 'system',
+          content: 'You are a helpful chef who returns a comma-separated list of ingredients for a given meal.'
+        },
+        {
+          role: 'user',
+          content: `List only the ingredients needed for the meal: "${mealName}". Do not add instructions.`
         }
-      }
-    );
+      ],
+      model: 'llama-3-8b',
+      temperature: 0.5,
+      max_tokens: 500,
+      top_p: 1
+    });
 
-    const rawIngredientsText = response.data.choices?.[0]?.message?.content || '';
+    const rawIngredientsText = chatCompletion.choices[0]?.message?.content || '';
     const extractedIngredients = extractIngredientsFromText(rawIngredientsText);
 
     const crops = await Crop.find({
@@ -51,7 +63,7 @@ export const getMatchedIngredientsFromDB = async (req, res) => {
       error.response?.data?.error?.code === 'invalid_request_error'
     ) {
       return res.status(402).json({
-        error: 'API quota exceeded or insufficient balance on DeepSeek API key.'
+        error: 'API quota exceeded or invalid Groq API key.'
       });
     }
 
