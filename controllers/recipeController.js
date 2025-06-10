@@ -1,6 +1,10 @@
 export const getMatchedIngredientsFromDB = async (req, res) => {
   const { mealName } = req.body;
 
+  if (!mealName || typeof mealName !== 'string' || mealName.trim().length < 3) {
+    return res.status(400).json({ error: 'Invalid or missing meal name.' });
+  }
+
   try {
     const response = await axios.post(
       'https://api.deepseek.com/v1/chat/completions',
@@ -27,7 +31,7 @@ export const getMatchedIngredientsFromDB = async (req, res) => {
       }
     );
 
-    const rawIngredientsText = response.data.choices[0].message.content;
+    const rawIngredientsText = response.data.choices?.[0]?.message?.content || '';
     const extractedIngredients = extractIngredientsFromText(rawIngredientsText);
 
     const crops = await Crop.find({
@@ -42,7 +46,6 @@ export const getMatchedIngredientsFromDB = async (req, res) => {
   } catch (error) {
     console.error('Error in getMatchedIngredientsFromDB:', error.response?.data || error.message);
 
-    
     if (
       error.response?.data?.error?.message?.toLowerCase().includes('insufficient balance') ||
       error.response?.data?.error?.code === 'invalid_request_error'
@@ -52,7 +55,6 @@ export const getMatchedIngredientsFromDB = async (req, res) => {
       });
     }
 
-   
     res.status(500).json({ error: 'Unable to fetch matching ingredients.' });
   }
 };
