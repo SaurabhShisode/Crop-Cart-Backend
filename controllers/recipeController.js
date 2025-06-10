@@ -37,7 +37,8 @@ export const getMatchedIngredientsFromDB = async (req, res) => {
           content: `List only the ingredients needed for the meal: "${mealName}". Do not add instructions.`
         }
       ],
-      model: 'llama-3-8b',
+      model: 'llama3-8b-8192',
+
       temperature: 0.5,
       max_tokens: 500,
       top_p: 1
