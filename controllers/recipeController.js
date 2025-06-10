@@ -1,10 +1,10 @@
 import axios from 'axios';
-import Crop from '../models/crop.js'; // Adjust the path as needed
+import Crop from '../models/Crops.js'; 
 
 const extractIngredientsFromText = (text) => {
   return text
     .toLowerCase()
-    .replace(/[\n•\-]/g, ',') // normalize line bullets
+    .replace(/[\n•\-]/g, ',') 
     .split(',')
     .map(i => i.trim())
     .filter(Boolean);
