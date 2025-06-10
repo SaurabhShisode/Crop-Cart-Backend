@@ -1,6 +1,11 @@
 import { Groq } from 'groq-sdk';
+import { config } from 'dotenv';
+import Crop from '../models/Crop.js';
+import extractIngredientsFromText from '../utils/extractIngredientsFromText.js';
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY }); // <== Make sure key is loaded
+config(); // Load environment variables
+
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 export const getMatchedIngredientsFromDB = async (req, res) => {
   const { mealName } = req.body;
@@ -21,7 +26,7 @@ export const getMatchedIngredientsFromDB = async (req, res) => {
           content: `List only the ingredients needed for the meal: "${mealName}". Do not add instructions.`
         }
       ],
-      model: 'llama3-8b-8192', // ✅ FIXED MODEL
+      model: 'llama-3.1-8b-instant', // ✅ You asked for this model
       temperature: 0.5,
       max_tokens: 500,
       top_p: 1
@@ -40,14 +45,17 @@ export const getMatchedIngredientsFromDB = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Error in getMatchedIngredientsFromDB:', error);
+    console.error('Error in getMatchedIngredientsFromDB:', error.response?.data || error.message);
 
-    const apiError = error?.response?.data?.error?.message;
-
-    if (apiError?.toLowerCase().includes('insufficient balance') || error?.code === 'model_not_found') {
-      return res.status(402).json({ error: 'API quota exceeded or model not found.' });
+    if (
+      error.response?.data?.error?.message?.toLowerCase().includes('insufficient balance') ||
+      error.response?.data?.error?.code === 'invalid_request_error'
+    ) {
+      return res.status(402).json({
+        error: 'API quota exceeded or model access issue.'
+      });
     }
 
-    return res.status(500).json({ error: 'Unable to fetch matching ingredients.' });
+    res.status(500).json({ error: 'Unable to fetch matching ingredients.' });
   }
 };
