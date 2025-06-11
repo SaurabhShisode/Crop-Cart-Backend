@@ -52,8 +52,11 @@ export const getMatchedIngredientsFromDB = async (req, res) => {
     console.log('🧪 Extracted ingredients:', extractedIngredients);
 
     const crops = await Crop.find({
-      name: { $in: extractedIngredients }
-    });
+  $or: extractedIngredients.map(ing => ({
+    name: { $regex: ing, $options: 'i' }
+  }))
+});
+
 
     console.log('🌾 Matched crops from DB:', crops);
 
