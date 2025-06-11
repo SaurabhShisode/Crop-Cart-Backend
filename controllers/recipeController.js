@@ -16,8 +16,11 @@ function extractIngredientsFromText(text) {
 }
 
 export const getMatchedIngredientsFromDB = async (req, res) => {
-  const { mealName } = req.body;
 
+
+  const { mealName } = req.body;
+  console.log('📡 Endpoint HIT: /api/recipes/ingredients-from-meal');
+  console.log('📦 Body received:', req.body);
   if (!mealName || typeof mealName !== 'string' || mealName.trim().length < 3) {
     return res.status(400).json({ error: 'Invalid or missing meal name.' });
   }
