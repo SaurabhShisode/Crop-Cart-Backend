@@ -8,11 +8,16 @@ const cropSchema = new mongoose.Schema(
     image: { type: String },
     regionPincodes: [{ type: String, required: true }],
     type: { type: String, required: true },
-    quantity: { type: String, required: true }, 
+    quantity: { type: String, required: true },
     farmer: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
+    },
+    // ✅ Added fields for geolocation
+    location: {
+      latitude: { type: Number, required: true },
+      longitude: { type: Number, required: true },
     },
   },
   { timestamps: true }

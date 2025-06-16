@@ -4,12 +4,23 @@ import mongoose from 'mongoose';
 
 
 export const addCrop = async (req, res) => {
-  try {
-    const crop = await Crop.create({ ...req.body, farmer: req.user._id });
-    res.json(crop);
-  } catch (error) {
-    res.status(500).json({ message: 'Failed to add crop', error: error.message });
-  }
+
+  console.log('Incoming crop data:', req.body);
+  if (
+    
+  !req.body.location ||
+    typeof req.body.location.latitude !== 'number' ||
+    typeof req.body.location.longitude !== 'number'
+) {
+  return res.status(400).json({ message: 'Invalid or missing coordinates' });
+}
+
+try {
+  const crop = await Crop.create({ ...req.body, farmer: req.user._id });
+  res.json(crop);
+} catch (error) {
+  res.status(500).json({ message: 'Failed to add crop', error: error.message });
+}
 };
 
 

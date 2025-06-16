@@ -6,6 +6,7 @@ dotenv.config();
 const farmerId = '683d2ff4d480b93443133d42';
 
 const crops = [
+
   {
     name: "Wheat",
     price: 32,
@@ -15,7 +16,10 @@ const crops = [
     regionPincodes: ["110001", "110002", "110003", "425401"],
     type: "crop",
     farmer: farmerId,
-
+    location: {
+      latitude: 21.0433,
+      longitude: 75.0580
+    }
   },
   {
     name: "Rice",
@@ -26,7 +30,10 @@ const crops = [
     regionPincodes: ["560001", "560002", "560003", "425401"],
     type: "crop",
     farmer: farmerId,
-
+    location: {
+      latitude: 21.0433,
+      longitude: 75.0580
+    }
   },
   {
     name: "Corn",
@@ -37,7 +44,10 @@ const crops = [
     regionPincodes: ["400001", "400002", "425401"],
     type: "crop",
     farmer: farmerId,
-
+    location: {
+      latitude: 21.0433,
+      longitude: 75.0580
+    }
   },
   {
     name: "Barley",
@@ -48,7 +58,10 @@ const crops = [
     regionPincodes: ["110001", "110002", "110004", "425401"],
     type: "crop",
     farmer: farmerId,
-
+    location: {
+      latitude: 21.0433,
+      longitude: 75.0580
+    }
   },
   {
     name: "Soybean",
@@ -59,7 +72,10 @@ const crops = [
     regionPincodes: ["700001", "700002", "425401"],
     type: "crop",
     farmer: farmerId,
-
+    location: {
+      latitude: 21.0433,
+      longitude: 75.0580
+    }
   },
   {
     name: "Cotton",
@@ -70,7 +86,10 @@ const crops = [
     regionPincodes: ["560001", "560004", "425401"],
     type: "crop",
     farmer: farmerId,
-
+    location: {
+      latitude: 21.0433,
+      longitude: 75.0580
+    }
   },
   {
     name: "Sugarcane",
@@ -81,7 +100,10 @@ const crops = [
     regionPincodes: ["400001", "400005", "425401"],
     type: "crop",
     farmer: farmerId,
-
+    location: {
+      latitude: 21.0433,
+      longitude: 75.0580
+    }
   },
   {
     name: "Millet",
@@ -92,10 +114,12 @@ const crops = [
     regionPincodes: ["400003", "110002", "425401"],
     type: "crop",
     farmer: farmerId,
-
+    location: {
+      latitude: 21.0433,
+      longitude: 75.0580
+    }
   },
   {
-    id: "20",
     name: "Lentils",
     price: 78,
     quantity: "1 kg",
@@ -104,10 +128,12 @@ const crops = [
     regionPincodes: ["110001", "700001", "425401"],
     type: "crop",
     farmer: farmerId,
-
+    location: {
+      latitude: 21.0433,
+      longitude: 75.0580
+    }
   },
   {
-    id: "21",
     name: "Flour",
     price: 32,
     quantity: "1 kg",
@@ -116,10 +142,12 @@ const crops = [
     regionPincodes: ["560001", "560005", "425401"],
     type: "grocery",
     farmer: farmerId,
-
+    location: {
+      latitude: 21.0433,
+      longitude: 75.0580
+    }
   },
   {
-    id: "22",
     name: "Cooking Oil",
     price: 135,
     quantity: "1 litre",
@@ -128,10 +156,12 @@ const crops = [
     regionPincodes: ["400001", "400008", "425401"],
     type: "grocery",
     farmer: farmerId,
-
+    location: {
+      latitude: 21.0433,
+      longitude: 75.0580
+    }
   },
   {
-    id: "23",
     name: "Sugar",
     price: 44,
     quantity: "1 kg",
@@ -140,10 +170,12 @@ const crops = [
     regionPincodes: ["110003", "110007", "425401"],
     type: "grocery",
     farmer: farmerId,
-
+    location: {
+      latitude: 21.0433,
+      longitude: 75.0580
+    }
   },
   {
-    id: "24",
     name: "Salt",
     price: 18,
     quantity: "1 kg",
@@ -152,10 +184,12 @@ const crops = [
     regionPincodes: ["700001", "700004", "425401"],
     type: "grocery",
     farmer: farmerId,
-
+    location: {
+      latitude: 21.0433,
+      longitude: 75.0580
+    }
   },
   {
-    id: "25",
     name: "Milk",
     price: 56,
     quantity: "1 litre",
@@ -164,7 +198,10 @@ const crops = [
     regionPincodes: ["110001", "110009", "425401"],
     type: "dairy",
     farmer: farmerId,
-
+    location: {
+      latitude: 21.0433,
+      longitude: 75.0580
+    }
   },
   {
     id: "26",
@@ -176,7 +213,7 @@ const crops = [
     regionPincodes: ["560002", "560006", "425401"],
     type: "dairy",
     farmer: farmerId,
-
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     id: "27",
@@ -188,7 +225,7 @@ const crops = [
     regionPincodes: ["400001", "400009", "425401"],
     type: "dairy",
     farmer: farmerId,
-
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     id: "28",
@@ -200,7 +237,7 @@ const crops = [
     regionPincodes: ["700002", "700005", "425401"],
     type: "dairy",
     farmer: farmerId,
-
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     id: "29",
@@ -212,7 +249,7 @@ const crops = [
     regionPincodes: ["110005", "110006", "425401"],
     type: "crop",
     farmer: farmerId,
-
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     name: "Peanuts",
@@ -223,7 +260,7 @@ const crops = [
     regionPincodes: ["560007", "560008", "425401"],
     type: "crop",
     farmer: farmerId,
-
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     name: "Green Gram",
@@ -234,7 +271,7 @@ const crops = [
     regionPincodes: ["700003", "700007", "425401"],
     type: "crop",
     farmer: farmerId,
-
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     name: "Jowar",
@@ -245,7 +282,7 @@ const crops = [
     regionPincodes: ["400003", "400006", "425401"],
     type: "crop",
     farmer: farmerId,
-
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     id: "33",
@@ -257,7 +294,7 @@ const crops = [
     regionPincodes: ["110002", "110008", "425401"],
     type: "grocery",
     farmer: farmerId,
-
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     id: "34",
@@ -269,7 +306,7 @@ const crops = [
     regionPincodes: ["560010", "560011", "425401"],
     type: "grocery",
     farmer: farmerId,
-
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     id: "35",
@@ -281,7 +318,7 @@ const crops = [
     regionPincodes: ["700010", "700011", "425401"],
     type: "grocery",
     farmer: farmerId,
-
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     id: "36",
@@ -293,7 +330,7 @@ const crops = [
     regionPincodes: ["110004", "110010", "425401"],
     type: "dairy",
     farmer: farmerId,
-
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     id: "37",
@@ -305,7 +342,7 @@ const crops = [
     regionPincodes: ["560009", "560012", "425401"],
     type: "dairy",
     farmer: farmerId,
-
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     id: "38",
@@ -317,7 +354,7 @@ const crops = [
     regionPincodes: ["400010", "400011", "425401"],
     type: "dairy",
     farmer: farmerId,
-
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     id: "39",
@@ -329,6 +366,7 @@ const crops = [
     regionPincodes: ["110011", "560013", "425401"],
     type: "spice",
     farmer: farmerId,
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     id: "40",
@@ -340,6 +378,7 @@ const crops = [
     regionPincodes: ["400012", "700008", "425401"],
     type: "spice",
     farmer: farmerId,
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     id: "41",
@@ -351,6 +390,7 @@ const crops = [
     regionPincodes: ["560014", "110012", "425401"],
     type: "spice",
     farmer: farmerId,
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     id: "42",
@@ -362,6 +402,7 @@ const crops = [
     regionPincodes: ["400013", "700009", "425401"],
     type: "spice",
     farmer: farmerId,
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     id: "43",
@@ -373,6 +414,7 @@ const crops = [
     regionPincodes: ["560015", "110013", "425401"],
     type: "crop",
     farmer: farmerId,
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     id: "44",
@@ -384,6 +426,7 @@ const crops = [
     regionPincodes: ["400014", "560016", "425401"],
     type: "vegetable",
     farmer: farmerId,
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     id: "45",
@@ -395,6 +438,7 @@ const crops = [
     regionPincodes: ["700012", "110014", "425401"],
     type: "crop",
     farmer: farmerId,
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     id: "46",
@@ -406,6 +450,7 @@ const crops = [
     regionPincodes: ["560017", "400015", "425401"],
     type: "vegetable",
     farmer: farmerId,
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     id: "47",
@@ -417,6 +462,7 @@ const crops = [
     regionPincodes: ["110015", "700013", "425401"],
     type: "vegetable",
     farmer: farmerId,
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     id: "48",
@@ -428,6 +474,7 @@ const crops = [
     regionPincodes: ["560018", "400016", "425401"],
     type: "vegetable",
     farmer: farmerId,
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     id: "49",
@@ -439,6 +486,7 @@ const crops = [
     regionPincodes: ["110016", "400017", "425401"],
     type: "spice",
     farmer: farmerId,
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     id: "50",
@@ -450,6 +498,7 @@ const crops = [
     regionPincodes: ["560019", "700014", "425401"],
     type: "spice",
     farmer: farmerId,
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     id: "51",
@@ -461,6 +510,7 @@ const crops = [
     regionPincodes: ["110017", "560020", "425401"],
     type: "spice",
     farmer: farmerId,
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     id: "52",
@@ -472,6 +522,7 @@ const crops = [
     regionPincodes: ["400018", "700015", "425401"],
     type: "spice",
     farmer: farmerId,
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     id: "53",
@@ -483,6 +534,7 @@ const crops = [
     regionPincodes: ["560021", "110018", "425401"],
     type: "spice",
     farmer: farmerId,
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     id: "54",
@@ -494,6 +546,7 @@ const crops = [
     regionPincodes: ["700016", "400019", "425401"],
     type: "spice",
     farmer: farmerId,
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     id: "55",
@@ -505,6 +558,7 @@ const crops = [
     regionPincodes: ["560022", "110019", "425401"],
     type: "spice",
     farmer: farmerId,
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     id: "56",
@@ -516,6 +570,7 @@ const crops = [
     regionPincodes: ["700017", "560023", "425401"],
     type: "spice",
     farmer: farmerId,
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     id: "57",
@@ -527,6 +582,7 @@ const crops = [
     regionPincodes: ["110020", "400020", "425401"],
     type: "spice",
     farmer: farmerId,
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
     id: "58",
@@ -538,117 +594,128 @@ const crops = [
     regionPincodes: ["560024", "700018", "425401"],
     type: "spice",
     farmer: farmerId,
+    location: { latitude: 21.0433, longitude: 75.0580 }
   },
   {
-  id: "59",
-  name: "Cauliflower",
-  price: 28,
-  quantity: "1 piece (~600 gm)",
-  availability: "Available now",
-  image: "https://m.media-amazon.com/images/I/91EdPVzD99L.jpg",
-  regionPincodes: ["110021", "400021", "425401"],
-  type: "vegetable",
-  farmer: farmerId,
-},
-{
-  id: "60",
-  name: "Cabbage",
-  price: 22,
-  quantity: "1 piece (~500 gm)",
-  availability: "Available now",
-  image: "https://i0.wp.com/live.staticflickr.com/65535/54473906289_30bdfbe1a2_z.jpg?resize=640%2C427&ssl=1",
-  regionPincodes: ["560025", "700019", "425401"],
-  type: "vegetable",
-  farmer: farmerId,
-},
-{
-  id: "61",
-  name: "Tomato",
-  price: 30,
-  quantity: "1 kg",
-  availability: "Available now",
-  image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFYDyy4PefRnI4GVpSCm5WwCi55kbgiv1zPg&s",
-  regionPincodes: ["110022", "400022", "425401"],
-  type: "vegetable",
-  farmer: farmerId,
-},
-{
-  id: "62",
-  name: "Onion",
-  price: 25,
-  quantity: "1 kg",
-  availability: "Available now",
-  image: "https://www.jiomart.com/images/product/original/590000087/onion-per-kg-product-images-o590000087-p590000087-1-202410141701.jpg?im=Resize=(1000,1000)",
-  regionPincodes: ["700020", "560026", "425401"],
-  type: "vegetable",
-  farmer: farmerId,
-},
-{
-  id: "63",
-  name: "Potato",
-  price: 20,
-  quantity: "1 kg",
-  availability: "Available now",
-  image: "https://cdn.mos.cms.futurecdn.net/iC7HBvohbJqExqvbKcV3pP.jpg",
-  regionPincodes: ["400023", "110023", "425401"],
-  type: "vegetable",
-  farmer: farmerId,
-},
-{
-  id: "64",
-  name: "Brinjal (Eggplant)",
-  price: 32,
-  quantity: "500 gm",
-  availability: "Available now",
-  image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE1rM1X0aULTAvz_Q7HYUbCd2fIgl9jMFRhA&s",
-  regionPincodes: ["560027", "700021", "425401"],
-  type: "vegetable",
-  farmer: farmerId,
-},
-{
-  id: "65",
-  name: "Carrot",
-  price: 34,
-  quantity: "500 gm",
-  availability: "Available now",
-  image: "https://seed2plant.in/cdn/shop/products/carrotseeds.jpg?v=1604032858&width=1500",
-  regionPincodes: ["110024", "400024", "425401"],
-  type: "vegetable",
-  farmer: farmerId,
-},
-{
-  id: "66",
-  name: "Beetroot",
-  price: 36,
-  quantity: "500 gm",
-  availability: "Available now",
-  image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRV4x0H1avf8Cw2p5TIYWg8sf1IUEPJA7yMMHbYf112u4shb4X7toW0VRs24tZPT5LXEQ0&usqp=CAU",
-  regionPincodes: ["700022", "560028", "425401"],
-  type: "vegetable",
-  farmer: farmerId,
-},
-{
-  id: "67",
-  name: "Green Peas",
-  price: 60,
-  quantity: "500 gm",
-  availability: "Seasonal",
-  image: "https://seed2plant.in/cdn/shop/products/greenpeas.jpg?v=1639212658",
-  regionPincodes: ["400025", "110025", "425401"],
-  type: "vegetable",
-  farmer: farmerId,
-},
-{
-  id: "68",
-  name: "Drumstick (Moringa)",
-  price: 35,
-  quantity: "2 pieces",
-  availability: "Available now",
-  image: "https://shivaruthraexports.com/wp-content/uploads/2021/10/drumstick-gallery8.jpg",
-  regionPincodes: ["560029", "700023", "425401"],
-  type: "vegetable",
-  farmer: farmerId,
-},
+    id: "59",
+    name: "Cauliflower",
+    price: 28,
+    quantity: "1 piece (~600 gm)",
+    availability: "Available now",
+    image: "https://m.media-amazon.com/images/I/91EdPVzD99L.jpg",
+    regionPincodes: ["110021", "400021", "425401"],
+    type: "vegetable",
+    farmer: farmerId,
+    location: { latitude: 21.0433, longitude: 75.0580 }
+  },
+  {
+    id: "60",
+    name: "Cabbage",
+    price: 22,
+    quantity: "1 piece (~500 gm)",
+    availability: "Available now",
+    image: "https://i0.wp.com/live.staticflickr.com/65535/54473906289_30bdfbe1a2_z.jpg?resize=640%2C427&ssl=1",
+    regionPincodes: ["560025", "700019", "425401"],
+    type: "vegetable",
+    farmer: farmerId,
+    location: { latitude: 21.0433, longitude: 75.0580 }
+  },
+  {
+    id: "61",
+    name: "Tomato",
+    price: 30,
+    quantity: "1 kg",
+    availability: "Available now",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSFYDyy4PefRnI4GVpSCm5WwCi55kbgiv1zPg&s",
+    regionPincodes: ["110022", "400022", "425401"],
+    type: "vegetable",
+    farmer: farmerId,
+    location: { latitude: 21.0433, longitude: 75.0580 }
+  },
+  {
+    id: "62",
+    name: "Onion",
+    price: 25,
+    quantity: "1 kg",
+    availability: "Available now",
+    image: "https://www.jiomart.com/images/product/original/590000087/onion-per-kg-product-images-o590000087-p590000087-1-202410141701.jpg?im=Resize=(1000,1000)",
+    regionPincodes: ["700020", "560026", "425401"],
+    type: "vegetable",
+    farmer: farmerId,
+    location: { latitude: 21.0433, longitude: 75.0580 }
+  },
+  {
+    id: "63",
+    name: "Potato",
+    price: 20,
+    quantity: "1 kg",
+    availability: "Available now",
+    image: "https://cdn.mos.cms.futurecdn.net/iC7HBvohbJqExqvbKcV3pP.jpg",
+    regionPincodes: ["400023", "110023", "425401"],
+    type: "vegetable",
+    farmer: farmerId,
+    location: { latitude: 21.0433, longitude: 75.0580 }
+  },
+  {
+    id: "64",
+    name: "Brinjal (Eggplant)",
+    price: 32,
+    quantity: "500 gm",
+    availability: "Available now",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQE1rM1X0aULTAvz_Q7HYUbCd2fIgl9jMFRhA&s",
+    regionPincodes: ["560027", "700021", "425401"],
+    type: "vegetable",
+    farmer: farmerId,
+    location: { latitude: 21.0433, longitude: 75.0580 }
+  },
+  {
+    id: "65",
+    name: "Carrot",
+    price: 34,
+    quantity: "500 gm",
+    availability: "Available now",
+    image: "https://seed2plant.in/cdn/shop/products/carrotseeds.jpg?v=1604032858&width=1500",
+    regionPincodes: ["110024", "400024", "425401"],
+    type: "vegetable",
+    farmer: farmerId,
+    location: { latitude: 21.0433, longitude: 75.0580 }
+  },
+  {
+    id: "66",
+    name: "Beetroot",
+    price: 36,
+    quantity: "500 gm",
+    availability: "Available now",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRV4x0H1avf8Cw2p5TIYWg8sf1IUEPJA7yMMHbYf112u4shb4X7toW0VRs24tZPT5LXEQ0&usqp=CAU",
+    regionPincodes: ["700022", "560028", "425401"],
+    type: "vegetable",
+    farmer: farmerId,
+    location: { latitude: 21.0433, longitude: 75.0580 }
+  },
+  {
+    id: "67",
+    name: "Green Peas",
+    price: 60,
+    quantity: "500 gm",
+    availability: "Seasonal",
+    image: "https://seed2plant.in/cdn/shop/products/greenpeas.jpg?v=1639212658",
+    regionPincodes: ["400025", "110025", "425401"],
+    type: "vegetable",
+    farmer: farmerId,
+    location: { latitude: 21.0433, longitude: 75.0580 }
+  },
+  {
+    id: "68",
+    name: "Drumstick (Moringa)",
+    price: 35,
+    quantity: "2 pieces",
+    availability: "Available now",
+    image: "https://shivaruthraexports.com/wp-content/uploads/2021/10/drumstick-gallery8.jpg",
+    regionPincodes: ["560029", "700023", "425401"],
+    type: "vegetable",
+    farmer: farmerId,
+    location: { latitude: 21.0433, longitude: 75.0580 }
+  },
 
 
 ];
