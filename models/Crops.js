@@ -14,7 +14,7 @@ const cropSchema = new mongoose.Schema(
       ref: 'User',
       required: true,
     },
-    // ✅ Added fields for geolocation
+   
     location: {
       latitude: { type: Number, required: true },
       longitude: { type: Number, required: true },

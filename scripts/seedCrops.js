@@ -17,8 +17,8 @@ const crops = [
     type: "crop",
     farmer: farmerId,
     location: {
-      latitude: 21.0433,
-      longitude: 75.0580
+      latitude: 21.0533,
+      longitude: 75.0880
     }
   },
   {
@@ -31,8 +31,8 @@ const crops = [
     type: "crop",
     farmer: farmerId,
     location: {
-      latitude: 21.0433,
-      longitude: 75.0580
+      latitude: 21.0933,
+      longitude: 75.0280
     }
   },
   {
@@ -45,8 +45,8 @@ const crops = [
     type: "crop",
     farmer: farmerId,
     location: {
-      latitude: 21.0433,
-      longitude: 75.0580
+      latitude: 21.0133,
+      longitude: 75.0780
     }
   },
   {
@@ -59,8 +59,8 @@ const crops = [
     type: "crop",
     farmer: farmerId,
     location: {
-      latitude: 21.0433,
-      longitude: 75.0580
+      latitude: 21.0363,
+      longitude: 75.0520
     }
   },
   {
@@ -73,8 +73,8 @@ const crops = [
     type: "crop",
     farmer: farmerId,
     location: {
-      latitude: 21.0433,
-      longitude: 75.0580
+      latitude: 21.0493,
+      longitude: 75.0582
     }
   },
   {
@@ -87,8 +87,8 @@ const crops = [
     type: "crop",
     farmer: farmerId,
     location: {
-      latitude: 21.0433,
-      longitude: 75.0580
+      latitude: 21.0743,
+      longitude: 75.0533
     }
   },
   {
@@ -102,7 +102,7 @@ const crops = [
     farmer: farmerId,
     location: {
       latitude: 21.0433,
-      longitude: 75.0580
+      longitude: 75.1780
     }
   },
   {
@@ -116,7 +116,7 @@ const crops = [
     farmer: farmerId,
     location: {
       latitude: 21.0433,
-      longitude: 75.0580
+      longitude: 75.0539
     }
   },
   {
@@ -129,8 +129,8 @@ const crops = [
     type: "crop",
     farmer: farmerId,
     location: {
-      latitude: 21.0433,
-      longitude: 75.0580
+      latitude: 21.0463,
+      longitude: 75.0592
     }
   },
   {
@@ -143,8 +143,7 @@ const crops = [
     type: "grocery",
     farmer: farmerId,
     location: {
-      latitude: 21.0433,
-      longitude: 75.0580
+      latitude: 21.0435, longitude: 75.0587
     }
   },
   {
@@ -157,8 +156,7 @@ const crops = [
     type: "grocery",
     farmer: farmerId,
     location: {
-      latitude: 21.0433,
-      longitude: 75.0580
+      latitude: 21.0428, longitude: 75.0572
     }
   },
   {
@@ -171,8 +169,7 @@ const crops = [
     type: "grocery",
     farmer: farmerId,
     location: {
-      latitude: 21.0433,
-      longitude: 75.0580
+      latitude: 21.0441, longitude: 75.0578
     }
   },
   {
@@ -185,8 +182,7 @@ const crops = [
     type: "grocery",
     farmer: farmerId,
     location: {
-      latitude: 21.0433,
-      longitude: 75.0580
+      latitude: 21.0419, longitude: 75.0584
     }
   },
   {
@@ -199,8 +195,7 @@ const crops = [
     type: "dairy",
     farmer: farmerId,
     location: {
-      latitude: 21.0433,
-      longitude: 75.0580
+      latitude: 21.0447, longitude: 75.0589
     }
   },
   {
@@ -213,7 +208,7 @@ const crops = [
     regionPincodes: ["560002", "560006", "425401"],
     type: "dairy",
     farmer: farmerId,
-    location: { latitude: 21.0433, longitude: 75.0580 }
+    location: { latitude: 21.0432, longitude: 75.0567 }
   },
   {
     id: "27",
@@ -225,7 +220,7 @@ const crops = [
     regionPincodes: ["400001", "400009", "425401"],
     type: "dairy",
     farmer: farmerId,
-    location: { latitude: 21.0433, longitude: 75.0580 }
+    location: { latitude: 21.0425, longitude: 75.0579 }
   },
   {
     id: "28",
@@ -237,7 +232,7 @@ const crops = [
     regionPincodes: ["700002", "700005", "425401"],
     type: "dairy",
     farmer: farmerId,
-    location: { latitude: 21.0433, longitude: 75.0580 }
+    location: { latitude: 21.0439, longitude: 75.0593 }
   },
   {
     id: "29",
@@ -249,7 +244,7 @@ const crops = [
     regionPincodes: ["110005", "110006", "425401"],
     type: "crop",
     farmer: farmerId,
-    location: { latitude: 21.0433, longitude: 75.0580 }
+    location: { latitude: 21.0421, longitude: 75.0588  }
   },
   {
     name: "Peanuts",
@@ -260,7 +255,7 @@ const crops = [
     regionPincodes: ["560007", "560008", "425401"],
     type: "crop",
     farmer: farmerId,
-    location: { latitude: 21.0433, longitude: 75.0580 }
+    location: { latitude: 21.0436, longitude: 75.0563  }
   },
   {
     name: "Green Gram",
@@ -271,7 +266,7 @@ const crops = [
     regionPincodes: ["700003", "700007", "425401"],
     type: "crop",
     farmer: farmerId,
-    location: { latitude: 21.0433, longitude: 75.0580 }
+    location: { latitude: 21.0426, longitude: 75.0573 }
   },
   {
     name: "Jowar",
@@ -282,7 +277,7 @@ const crops = [
     regionPincodes: ["400003", "400006", "425401"],
     type: "crop",
     farmer: farmerId,
-    location: { latitude: 21.0433, longitude: 75.0580 }
+    location: { latitude: 21.0418, longitude: 75.0585 }
   },
   {
     id: "33",
@@ -294,7 +289,7 @@ const crops = [
     regionPincodes: ["110002", "110008", "425401"],
     type: "grocery",
     farmer: farmerId,
-    location: { latitude: 21.0433, longitude: 75.0580 }
+    location: { latitude: 21.0442, longitude: 75.0570 }
   },
   {
     id: "34",
@@ -306,7 +301,7 @@ const crops = [
     regionPincodes: ["560010", "560011", "425401"],
     type: "grocery",
     farmer: farmerId,
-    location: { latitude: 21.0433, longitude: 75.0580 }
+    location: { latitude: 21.0434, longitude: 75.0566 }
   },
   {
     id: "35",
@@ -318,7 +313,7 @@ const crops = [
     regionPincodes: ["700010", "700011", "425401"],
     type: "grocery",
     farmer: farmerId,
-    location: { latitude: 21.0433, longitude: 75.0580 }
+    location: { latitude: 21.0427, longitude: 75.0561 }
   },
   {
     id: "36",
@@ -330,7 +325,7 @@ const crops = [
     regionPincodes: ["110004", "110010", "425401"],
     type: "dairy",
     farmer: farmerId,
-    location: { latitude: 21.0433, longitude: 75.0580 }
+    location: {latitude: 21.0416, longitude: 75.0582 }
   },
   {
     id: "37",
