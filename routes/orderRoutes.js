@@ -93,4 +93,24 @@ router.delete('/:id', protect, async (req, res) => {
   }
 });
 
+router.patch('/:id/fulfill', authMiddleware, async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (!order) return res.status(404).json({ message: 'Order not found' });
+
+    if (order.fulfilled) {
+      return res.status(400).json({ message: 'Order already fulfilled' });
+    }
+
+    order.fulfilled = true;
+    order.fulfilledAt = new Date();
+    await order.save();
+
+    res.status(200).json(order);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to fulfill order' });
+  }
+});
+
+
 export default router;
