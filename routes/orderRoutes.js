@@ -102,17 +102,22 @@ router.patch('/:id/fulfill', protect, async (req, res) => {
       return res.status(400).json({ message: 'Order already fulfilled' });
     }
 
+
+    if (!order.deliveryTime) {
+      order.deliveryTime = 30;
+    }
+
     order.fulfilled = true;
     order.fulfilledAt = new Date();
     await order.save();
 
     res.status(200).json(order);
   } catch (err) {
-  console.error('Fulfill error:', err); 
-  res.status(500).json({ message: 'Failed to fulfill order' });
-}
-
+    console.error('Fulfill error:', err);
+    res.status(500).json({ message: 'Failed to fulfill order' });
+  }
 });
+
 
 
 export default router;
