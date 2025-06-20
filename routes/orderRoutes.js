@@ -1,6 +1,6 @@
 import express from 'express';
 import Order from '../models/Order.js';
-import { protect } from '../middleware/authMiddleware.js';  
+import { protect } from '../middleware/authMiddleware.js';
 import nodemailer from 'nodemailer';
 
 const router = express.Router();
@@ -8,8 +8,8 @@ const router = express.Router();
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.EMAIL_USER,      
-    pass: process.env.EMAIL_PASSWORD,  
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD,
   },
 });
 
@@ -29,8 +29,8 @@ router.post('/', async (req, res) => {
         <p><b>Phone:</b> ${newOrder.phone}</p>
         <h3>Items:</h3>
         <ul>
-          ${newOrder.items.map(item => 
-            `<li>${item.name} — ${item.quantity} (${item.quantityInCart})</li>`).join('')}
+          ${newOrder.items.map(item =>
+        `<li>${item.name} — ${item.quantity} (${item.quantityInCart})</li>`).join('')}
         </ul>
         <p><b>Total:</b> ₹${newOrder.total}</p>
         <p>We will notify you once your order is shipped.</p>
@@ -79,7 +79,7 @@ router.delete('/:id', protect, async (req, res) => {
       return res.status(404).json({ message: 'Order not found' });
     }
 
-    
+
     if (order.userId.toString() !== req.user.id) {
       return res.status(403).json({ message: 'You are not authorized to delete this order' });
     }
@@ -93,7 +93,7 @@ router.delete('/:id', protect, async (req, res) => {
   }
 });
 
-router.patch('/:id/fulfill', authMiddleware, async (req, res) => {
+router.patch('/:id/fulfill', protect, async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
     if (!order) return res.status(404).json({ message: 'Order not found' });
