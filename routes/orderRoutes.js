@@ -102,13 +102,16 @@ router.patch('/:id/fulfill', protect, async (req, res) => {
       return res.status(400).json({ message: 'Order already fulfilled' });
     }
 
-
     if (!order.deliveryTime) {
       order.deliveryTime = 30;
     }
 
+    const deliveryMilliseconds = order.deliveryTime * 60 * 1000;
+    const estimatedFulfillmentDate = new Date(order.createdAt.getTime() + deliveryMilliseconds);
+
     order.fulfilled = true;
-    order.fulfilledAt = new Date();
+    order.fulfilledAt = estimatedFulfillmentDate;
+
     await order.save();
 
     res.status(200).json(order);
