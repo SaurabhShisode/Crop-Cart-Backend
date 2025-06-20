@@ -108,8 +108,10 @@ router.patch('/:id/fulfill', protect, async (req, res) => {
 
     res.status(200).json(order);
   } catch (err) {
-    res.status(500).json({ message: 'Failed to fulfill order' });
-  }
+  console.error('Fulfill error:', err); 
+  res.status(500).json({ message: 'Failed to fulfill order' });
+}
+
 });
 
 
