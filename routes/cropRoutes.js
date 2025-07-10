@@ -1,9 +1,9 @@
 import express from 'express';
-import Crop from '../models/Crops.js'; // Your MongoDB model for crops
+import Crop from '../models/Crops.js'; 
 
 const router = express.Router();
 
-// GET /crops - return all crops
+
 router.get('/', async (req, res) => {
   try {
     const crops = await Crop.find(); 
