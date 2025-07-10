@@ -4,13 +4,13 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import http from 'http';
 import { Server } from 'socket.io';
-import ChatMessage from './models/Message.js';
+
 import authRoutes from './routes/userRoutes.js';
 import cropRoutes from './routes/cropRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import farmerRoutes from './routes/farmerRoutes.js';
 import recipeRoutes from './routes/recipeRoute.js';
-import chatRoutes from './routes/chatRoutes.js';
+
 
 dotenv.config();
 
@@ -46,7 +46,7 @@ app.use('/api/crops', cropRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/farmer', farmerRoutes);
 app.use('/api/recipes', recipeRoutes);
-app.use('/api/chat', chatRoutes);
+
 
 app.get('/', (req, res) => {
   res.send('🌾 CropCart Backend API is running');
@@ -60,31 +60,6 @@ const io = new Server(server, {
     credentials: true,
     methods: ['GET', 'POST'],
   },
-});
-
-
-io.on('connection', (socket) => {
-  console.log(`User connected: ${socket.id}`);
-
-  socket.on('join_room', (room) => {
-    socket.join(room);
-    console.log(`User ${socket.id} joined room: ${room}`);
-  });
-
-  socket.on('send_message', async (data) => {
-    try {
-      const newMessage = new ChatMessage(data);
-      await newMessage.save();
-
-      io.to(data.room).emit('receive_message', data);
-    } catch (error) {
-      console.error('Error saving chat message:', error);
-    }
-  });
-
-  socket.on('disconnect', () => {
-    console.log(`User disconnected: ${socket.id}`);
-  });
 });
 
 mongoose.connect(process.env.MONGO_URI, {
